@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fredrick Akojuru | Full Stack Developer &amp; Agency Founder</title>
+    <link>https://fredrickakojuru.com</link>
+    <description>Professional portfolio of Fredrick Akojuru, full stack developer and founding CEO of AlienDev Agency based in Abuja, Nigeria.</description>
+    <language>en-us</language>
+    <atom:link href="https://fredrickakojuru.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Fri, 10 May 2025 18:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Fredrick Akojuru's Professional Portfolio</title>
+      <link>https://fredrickakojuru.com</link>
+      <description>Full stack developer and founding CEO of AlienDev Agency, focused on creating innovative digital solutions.</description>
+      <pubDate>Fri, 10 May 2025 12:00:00 GMT</pubDate>
+      <guid>https://fredrickakojuru.com</guid>
+    </item>
+    <item>
+      <title>AlienDev Agency Services</title>
+      <link>https://fredrickakojuru.com/#agency</link>
+      <description>Comprehensive web development services offered by AlienDev Agency, including custom websites, UI/UX design, e-commerce solutions, and more.</description>
+      <pubDate>Fri, 10 May 2025 11:00:00 GMT</pubDate>
+      <guid>https://fredrickakojuru.com/#agency</guid>
+    </item>
+    <item>
+      <title>Web Development Portfolio</title>
+      <link>https://fredrickakojuru.com/#projects</link>
+      <description>Showcasing Fredrick Akojuru's web development projects including AfriRecipes, Mountain of Solution, SparkED, and Benchmark App.</description>
+      <pubDate>Fri, 10 May 2025 10:00:00 GMT</pubDate>
+      <guid>https://fredrickakojuru.com/#projects</guid>
+    </item>
+    <item>
+      <title>Fredrick Akojuru's CV</title>
+      <link>https://fredrickakojuru.com/cv</link>
+      <description>Professional curriculum vitae of Fredrick Akojuru, detailing skills, experience, and qualifications.</description>
+      <pubDate>Fri, 10 May 2025 09:00:00 GMT</pubDate>
+      <guid>https://fredrickakojuru.com/cv</guid>
+    </item>
+  </channel>
+</rss>

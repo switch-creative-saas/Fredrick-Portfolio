@@ -1,0 +1,92 @@
+/* Print styles for Fredrick Akojuru's portfolio */
+
+@media print {
+  /* General print styles */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Hide non-essential elements */
+  header,
+  footer,
+  nav,
+  .scroll-to-top,
+  button:not(.print-show),
+  [role="complementary"],
+  .no-print {
+    display: none !important;
+  }
+
+  /* Show print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Adjust layout for printing */
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Ensure text is readable */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  li {
+    color: #000 !important;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  /* Handle links */
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 90%;
+  }
+
+  /* Improve image printing */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Page breaks */
+  section,
+  article {
+    page-break-inside: avoid;
+  }
+
+  /* CV specific styles */
+  #cv-content {
+    display: block !important;
+  }
+
+  /* Force page breaks before major sections */
+  #about,
+  #projects,
+  #agency,
+  #contact {
+    page-break-before: always;
+  }
+}
