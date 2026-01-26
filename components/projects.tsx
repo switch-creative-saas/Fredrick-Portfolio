@@ -104,7 +104,7 @@ export function Projects() {
 
       <div className="grid gap-6 md:grid-cols-2 stagger-container">
         {projects.map((project, index) => (
-          <Card key={index} className="overflow-hidden stagger-item card-hover">
+          <div key={index} className="project-glass glass-hover stagger-item overflow-hidden">
             <div className="aspect-video w-full overflow-hidden image-hover">
               <OptimizedImage
                 src={project.image}
@@ -129,7 +129,7 @@ export function Projects() {
               </div>
             </CardContent>
             <CardFooter className="flex gap-2">
-              <Button asChild variant="outline" size="sm" className="button-hover">
+              <Button asChild variant="outline" size="sm" className="button-hover bg-transparent">
                 <Link href={project.github} target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-4 w-4" />
                   Code
@@ -142,7 +142,7 @@ export function Projects() {
                 </Link>
               </Button>
             </CardFooter>
-          </Card>
+          </div>
         ))}
       </div>
     </section>

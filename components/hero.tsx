@@ -60,7 +60,7 @@ export function Hero() {
                   Get in touch <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="outline" className="gap-1 button-hover" asChild>
+              <Button variant="outline" className="gap-1 button-hover bg-transparent" asChild>
                 <a href="/fredrick-akojuru-cv.pdf" download="Fredrick-Akojuru-CV.pdf">
                   Download CV <Download className="h-4 w-4" />
                 </a>
@@ -68,12 +68,14 @@ export function Hero() {
             </div>
           </div>
           <div className="flex items-center justify-center slide-in-right">
-            <div
-              ref={imageRef}
-              className="relative aspect-square overflow-hidden rounded-full border bg-muted md:w-[400px] transition-transform duration-200 ease-out"
-            >
-              <img src="/images/profile.png" alt="Fredrick Akojuru" className="object-cover" width={400} height={400} />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
+            <div className="frosted-glass relative md:w-[400px] md:h-[400px] p-2">
+              <div
+                ref={imageRef}
+                className="relative aspect-square overflow-hidden rounded-full border bg-muted md:w-full transition-transform duration-200 ease-out"
+              >
+                <img src="/images/profile.png" alt="Fredrick Akojuru" className="object-cover" width={400} height={400} />
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
+              </div>
             </div>
           </div>
         </div>
