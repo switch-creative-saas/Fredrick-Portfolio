@@ -9,12 +9,12 @@ import { Goals } from "@/components/goals"
 import { Contact } from "@/components/contact"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { ImageLoader } from "./image-loader"
-import { FAQ } from "@/components/faq"
-import { Testimonials } from "@/components/testimonials"
 import { Suspense } from "react"
 import { CriticalCSS } from "@/components/critical-css"
 import { FontOptimization } from "@/components/font-optimization"
 import { MobileOptimizations } from "@/components/mobile-optimizations"
+import { Testimonials } from "@/components/testimonials"
+import { FAQ } from "@/components/faq"
 
 export default function Home() {
   return (
@@ -56,14 +56,6 @@ export default function Home() {
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading goals section...</div>}>
         <Goals />
-      </Suspense>
-
-      <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading testimonials section...</div>}>
-        <Testimonials />
-      </Suspense>
-
-      <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading FAQ section...</div>}>
-        <FAQ />
       </Suspense>
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading contact section...</div>}>

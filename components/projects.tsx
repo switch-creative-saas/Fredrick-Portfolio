@@ -72,15 +72,15 @@ export function Projects() {
       description:
         "E-commerce marketplace platform designed for seamless shopping experiences, multi-vendor support, and scalable transaction handling.",
       technologies: ["Next.js", "E-commerce", "Marketplace", "Payment Integration", "Cloud"],
-      link: "https://glintsell.vercel.app/",
+      link: "https://glintsell-waitlist.vercel.app/",
       github: "https://github.com/fredrickakojuru/glintsell",
       image: "/images/glintsell.png",
     },
     {
       title: "Nova Secret",
       description:
-        "A secure communication platform with end-to-end encryption, user privacy focus, and modern messaging capabilities.",
-      technologies: ["Next.js", "Security", "Real-time", "Encryption", "Database"],
+        "Premium catering and baking platform offering custom cakes, exquisite catering services, pastries, and private chef experiences for special events in Abuja.",
+      technologies: ["Next.js", "Catering", "E-commerce", "Event Management", "Responsive Design"],
       link: "https://novasecret.vercel.app/",
       github: "https://github.com/fredrickakojuru/nova-secret",
       image: "/images/nova-secret.png",
@@ -88,8 +88,8 @@ export function Projects() {
     {
       title: "Bright Prayer Hub",
       description:
-        "Spiritual community platform connecting believers through prayer requests, community support, and faith-based resources.",
-      technologies: ["Next.js", "Community", "Firebase", "Responsive Design", "Social"],
+        "Islamic e-commerce platform dedicated to selling authentic Muslim religious books, Islamic literature, and faith-based resources for spiritual growth.",
+      technologies: ["Next.js", "E-commerce", "Religious Resources", "Book Sales", "Community"],
       link: "https://bbright.vercel.app/",
       github: "https://github.com/fredrickakojuru/bright-prayer",
       image: "/images/bright-prayer.png",
