@@ -478,7 +478,7 @@
 
 /* Floating Header Glass */
 .floating-header {
-  background: transparent;
+  background: hsl(var(--background));
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border: none;
