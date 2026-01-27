@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { FileText, Mail, Phone, MapPin, Github, Linkedin, Twitter, Instagram, Facebook, Rss } from "lucide-react"
+import { FileText, Mail, Phone, MapPin, Github, Linkedin, Rss } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { InstagramIcon, FacebookIcon, XIcon } from "@/components/icons"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -11,8 +12,7 @@ export function Footer() {
         <div className="md:col-span-4">
           <h2 className="text-xl font-bold mb-4">Fredrick Akojuru</h2>
           <p className="text-muted-foreground mb-4">
-            Full stack developer and founding CEO of AlienDev Agency, focused on creating innovative digital solutions
-            and bridging technology with healthcare through public health studies.
+            Founder & CEO of GlintSell, Co-founder & CTO of mySwitch Health. Full-stack engineer building transformative healthcare and e-commerce platforms with expertise in technical leadership, product architecture, and startup scaling.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" size="icon" asChild aria-label="GitHub Profile">
@@ -25,19 +25,19 @@ export function Footer() {
                 <Linkedin className="h-4 w-4" />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild aria-label="Twitter Profile">
-              <a href="https://twitter.com/fredrickakojuru" target="_blank" rel="noopener noreferrer">
-                <Twitter className="h-4 w-4" />
+            <Button variant="outline" size="icon" asChild aria-label="X (Twitter) Profile">
+              <a href="https://x.com/clearskiies11" target="_blank" rel="noopener noreferrer">
+                <XIcon />
               </a>
             </Button>
             <Button variant="outline" size="icon" asChild aria-label="Instagram Profile">
-              <a href="https://instagram.com/fredrickakojuru" target="_blank" rel="noopener noreferrer">
-                <Instagram className="h-4 w-4" />
+              <a href="https://www.instagram.com/_clearskiies?igsh=MThlZDIzdmp2N2JiNQ==" target="_blank" rel="noopener noreferrer">
+                <InstagramIcon />
               </a>
             </Button>
-            <Button variant="outline" size="icon" asChild aria-label="Facebook Page">
-              <a href="https://facebook.com/aliendevagency" target="_blank" rel="noopener noreferrer">
-                <Facebook className="h-4 w-4" />
+            <Button variant="outline" size="icon" asChild aria-label="Facebook Profile">
+              <a href="https://www.facebook.com/share/1AZ97ErHQB/" target="_blank" rel="noopener noreferrer">
+                <FacebookIcon />
               </a>
             </Button>
           </div>

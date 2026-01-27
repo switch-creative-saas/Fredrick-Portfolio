@@ -31,14 +31,8 @@ export function Header() {
   }, [])
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
-        scrolled
-          ? "bg-background/80 backdrop-blur-md"
-          : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
-      }`}
-    >
-      <div className="container flex h-16 items-center justify-between">
+    <header className="floating-header fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300">
+      <div className="container flex h-16 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-xl font-bold">Fredrick Akojuru</span>
         </Link>
@@ -81,7 +75,7 @@ export function Header() {
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <div className="absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-md border-b md:hidden animate-in slide-in-from-top duration-300">
+          <div className="absolute top-16 left-0 right-0 mx-6 rounded-2xl bg-background/95 backdrop-blur-md border md:hidden animate-in slide-in-from-top duration-300 border-primary/20">
             <div className="flex flex-col p-4 space-y-4">
               <Link
                 href="#about"

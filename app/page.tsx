@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hero"
 import { About } from "@/components/about"
+import { WorkExperience } from "@/components/work-experience"
 import { Education } from "@/components/education"
 import { Skills } from "@/components/skills"
 import { Projects } from "@/components/projects"
@@ -8,16 +9,16 @@ import { Goals } from "@/components/goals"
 import { Contact } from "@/components/contact"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { ImageLoader } from "./image-loader"
-import { FAQ } from "@/components/faq"
-import { Testimonials } from "@/components/testimonials"
 import { Suspense } from "react"
 import { CriticalCSS } from "@/components/critical-css"
 import { FontOptimization } from "@/components/font-optimization"
 import { MobileOptimizations } from "@/components/mobile-optimizations"
+import { Testimonials } from "@/components/testimonials"
+import { FAQ } from "@/components/faq"
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen pt-20">
       {/* Performance optimizations */}
       <CriticalCSS />
       <FontOptimization />
@@ -31,6 +32,10 @@ export default function Home() {
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading about section...</div>}>
         <About />
+      </Suspense>
+
+      <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading work experience section...</div>}>
+        <WorkExperience />
       </Suspense>
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading education section...</div>}>
@@ -51,14 +56,6 @@ export default function Home() {
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading goals section...</div>}>
         <Goals />
-      </Suspense>
-
-      <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading testimonials section...</div>}>
-        <Testimonials />
-      </Suspense>
-
-      <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading FAQ section...</div>}>
-        <FAQ />
       </Suspense>
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading contact section...</div>}>

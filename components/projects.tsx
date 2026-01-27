@@ -58,6 +58,42 @@ export function Projects() {
       github: "https://github.com/fredrickakojuru/benchmark-app",
       image: "/images/benchmark.png",
     },
+    {
+      title: "mySwitch Health",
+      description:
+        "Health-tech platform providing smart NFC health cards, secure patient systems, and AI-powered health ID solutions for Africa's healthcare ecosystem.",
+      technologies: ["Next.js", "Supabase", "PostgreSQL", "Health-tech", "Secure Backend"],
+      link: "https://myswitchhealth.com/",
+      github: "https://github.com/fredrickakojuru/myswitch-health",
+      image: "/images/myswitch-health.png",
+    },
+    {
+      title: "GlintSell",
+      description:
+        "E-commerce marketplace platform designed for seamless shopping experiences, multi-vendor support, and scalable transaction handling.",
+      technologies: ["Next.js", "E-commerce", "Marketplace", "Payment Integration", "Cloud"],
+      link: "https://glintsell-waitlist.vercel.app/",
+      github: "https://github.com/fredrickakojuru/glintsell",
+      image: "/images/glintsell.png",
+    },
+    {
+      title: "Nova Secret",
+      description:
+        "Premium catering and baking platform offering custom cakes, exquisite catering services, pastries, and private chef experiences for special events in Abuja.",
+      technologies: ["Next.js", "Catering", "E-commerce", "Event Management", "Responsive Design"],
+      link: "https://novasecret.vercel.app/",
+      github: "https://github.com/fredrickakojuru/nova-secret",
+      image: "/images/nova-secret.png",
+    },
+    {
+      title: "Bright Prayer Hub",
+      description:
+        "Islamic e-commerce platform dedicated to selling authentic Muslim religious books, Islamic literature, and faith-based resources for spiritual growth.",
+      technologies: ["Next.js", "E-commerce", "Religious Resources", "Book Sales", "Community"],
+      link: "https://bbright.vercel.app/",
+      github: "https://github.com/fredrickakojuru/bright-prayer",
+      image: "/images/bright-prayer.png",
+    },
   ]
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://fredrickakojuru.com"
@@ -104,7 +140,7 @@ export function Projects() {
 
       <div className="grid gap-6 md:grid-cols-2 stagger-container">
         {projects.map((project, index) => (
-          <Card key={index} className="overflow-hidden stagger-item card-hover">
+          <div key={index} className="project-glass glass-hover stagger-item overflow-hidden">
             <div className="aspect-video w-full overflow-hidden image-hover">
               <OptimizedImage
                 src={project.image}
@@ -129,7 +165,7 @@ export function Projects() {
               </div>
             </CardContent>
             <CardFooter className="flex gap-2">
-              <Button asChild variant="outline" size="sm" className="button-hover">
+              <Button asChild variant="outline" size="sm" className="button-hover bg-transparent">
                 <Link href={project.github} target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-4 w-4" />
                   Code
@@ -142,7 +178,7 @@ export function Projects() {
                 </Link>
               </Button>
             </CardFooter>
-          </Card>
+          </div>
         ))}
       </div>
     </section>
