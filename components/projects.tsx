@@ -58,6 +58,42 @@ export function Projects() {
       github: "https://github.com/fredrickakojuru/benchmark-app",
       image: "/images/benchmark.png",
     },
+    {
+      title: "mySwitch Health",
+      description:
+        "Health-tech platform providing smart NFC health cards, secure patient systems, and AI-powered health ID solutions for Africa's healthcare ecosystem.",
+      technologies: ["Next.js", "Supabase", "PostgreSQL", "Health-tech", "Secure Backend"],
+      link: "https://myswitchhealth.com/",
+      github: "https://github.com/fredrickakojuru/myswitch-health",
+      image: "/images/myswitch-health.png",
+    },
+    {
+      title: "GlintSell",
+      description:
+        "E-commerce marketplace platform designed for seamless shopping experiences, multi-vendor support, and scalable transaction handling.",
+      technologies: ["Next.js", "E-commerce", "Marketplace", "Payment Integration", "Cloud"],
+      link: "https://glintsell.vercel.app/",
+      github: "https://github.com/fredrickakojuru/glintsell",
+      image: "/images/glintsell.png",
+    },
+    {
+      title: "Nova Secret",
+      description:
+        "A secure communication platform with end-to-end encryption, user privacy focus, and modern messaging capabilities.",
+      technologies: ["Next.js", "Security", "Real-time", "Encryption", "Database"],
+      link: "https://novasecret.vercel.app/",
+      github: "https://github.com/fredrickakojuru/nova-secret",
+      image: "/images/nova-secret.png",
+    },
+    {
+      title: "Bright Prayer Hub",
+      description:
+        "Spiritual community platform connecting believers through prayer requests, community support, and faith-based resources.",
+      technologies: ["Next.js", "Community", "Firebase", "Responsive Design", "Social"],
+      link: "https://bbright.vercel.app/",
+      github: "https://github.com/fredrickakojuru/bright-prayer",
+      image: "/images/bright-prayer.png",
+    },
   ]
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://fredrickakojuru.com"
