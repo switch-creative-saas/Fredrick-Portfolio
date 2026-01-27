@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hero"
 import { About } from "@/components/about"
+import { WorkExperience } from "@/components/work-experience"
 import { Education } from "@/components/education"
 import { Skills } from "@/components/skills"
 import { Projects } from "@/components/projects"
@@ -31,6 +32,10 @@ export default function Home() {
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading about section...</div>}>
         <About />
+      </Suspense>
+
+      <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading work experience section...</div>}>
+        <WorkExperience />
       </Suspense>
 
       <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading education section...</div>}>

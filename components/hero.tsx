@@ -44,15 +44,14 @@ export function Hero() {
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground slide-in-left" style={{ animationDelay: "0.2s" }}>
-                Full Stack Developer | Founding CEO at AlienDev Agency | Public Health Student
+                Founder & CEO at GlintSell | Co-founder & CTO at mySwitch Health | Full Stack Engineer
               </p>
             </div>
             <p
               className="max-w-[600px] text-muted-foreground md:text-xl slide-in-left"
               style={{ animationDelay: "0.4s" }}
             >
-              Building innovative digital solutions through AlienDev Agency while pursuing a second degree in public
-              health to bridge technology and healthcare.
+              Building transformative healthcare and e-commerce platforms. Experienced in technical leadership, product architecture, and scaling startups. Passionate about solving real-world problems through innovative technology and strategic product vision.
             </p>
             <div className="flex flex-col gap-2 min-[400px]:flex-row slide-in-left" style={{ animationDelay: "0.6s" }}>
               <Link href="#contact">
