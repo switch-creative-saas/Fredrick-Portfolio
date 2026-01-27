@@ -26,6 +26,9 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://fredrickakojuru.com
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  icons: {
+    icon: "/favicon.ico",
+  },
   title: {
     default: "Fredrick Akojuru – CTO, Founder, Tech Leader | Full Stack Engineer",
     template: "%s | Fredrick Akojuru - CTO & Founder",

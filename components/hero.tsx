@@ -88,7 +88,7 @@ export function Hero() {
             </div>
           </div>
           <div className="flex items-center justify-center slide-in-right">
-            <div className="frosted-glass relative md:w-[400px] md:h-[400px] p-2">
+            <div className="frosted-glass relative md:w-[400px] md:h-[400px] p-2 rounded-full">
               <div
                 ref={imageRef}
                 className="relative aspect-square overflow-hidden rounded-full border bg-muted md:w-full transition-transform duration-200 ease-out"
