@@ -21,10 +21,31 @@ export function Hero() {
       imageRef.current.style.transform = `perspective(1000px) rotateY(${x * 5}deg) rotateX(${y * -5}deg)`
     }
 
+    const handleMouseLeave = () => {
+      if (imageRef.current) {
+        imageRef.current.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)"
+      }
+    }
+
+    const handleScroll = () => {
+      if (imageRef.current) {
+        imageRef.current.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)"
+      }
+    }
+
+    const imageElement = imageRef.current
     window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("scroll", handleScroll)
+    if (imageElement) {
+      imageElement.addEventListener("mouseleave", handleMouseLeave)
+    }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener("scroll", handleScroll)
+      if (imageElement) {
+        imageElement.removeEventListener("mouseleave", handleMouseLeave)
+      }
     }
   }, [])
 
