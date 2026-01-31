@@ -168,10 +168,10 @@ export default function RootLayout({
             </Suspense>
             <PerformanceOptimization />
             <ServiceWorkerRegistration />
-            <div className="flex min-h-screen flex-col">
+            <div className="flex min-h-screen flex-col w-full p-0 m-0">
               <Header />
               <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
-                <div className="flex-1">{children}</div>
+                <div className="flex-1 w-full p-0 m-0">{children}</div>
               </Suspense>
               <Footer />
             </div>
