@@ -50,18 +50,26 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  *,
+  *::before,
+  *::after {
     margin: 0;
     padding: 0;
   }
-  html, body {
+  
+  html {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden;
+    height: 100%;
   }
+  
   body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
     @apply bg-background text-foreground;
     text-rendering: optimizeSpeed;
   }

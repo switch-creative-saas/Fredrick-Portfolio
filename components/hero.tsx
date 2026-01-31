@@ -50,7 +50,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden pt-24 md:pt-32 pb-20 md:pb-32 bg-gradient-to-b from-blue-50 via-blue-25 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <section className="relative w-full min-h-screen overflow-hidden m-0 p-0 pb-20 md:pb-32 bg-gradient-to-b from-blue-50 via-blue-25 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       {/* Premium gradient overlay */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12),transparent_60%)]"></div>
@@ -58,9 +58,9 @@ export function Hero() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/20 dark:bg-blue-800/20 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container px-4 md:px-6 relative z-10 h-full">
-        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] h-full items-center">
-          <div className="flex flex-col justify-center space-y-4 min-h-full justify-center">
+      <div className="container px-4 md:px-6 relative z-10 h-full flex items-center pt-20 md:pt-24">
+        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] w-full items-center">
+          <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none slide-in-left">
                 <span className="typewriter" data-speed="100">
