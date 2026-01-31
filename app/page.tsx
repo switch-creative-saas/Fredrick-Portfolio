@@ -18,7 +18,7 @@ import { FAQ } from "@/components/faq"
 
 export default function Home() {
   return (
-    <main className="w-full min-h-screen p-0 m-0">
+    <main className="min-h-screen pt-20">
       {/* Performance optimizations */}
       <CriticalCSS />
       <FontOptimization />

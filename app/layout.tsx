@@ -12,6 +12,7 @@ import { Suspense } from "react"
 import { HeadTags } from "@/components/head-tags"
 import { PerformanceOptimization } from "@/components/performance-optimization"
 import { ServiceWorkerRegistration } from "./service-worker-registration"
+import { LoadingScreen } from "@/components/loading-screen"
 
 // Optimize font loading
 const inter = Inter({
@@ -162,16 +163,17 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AnimationProvider>
+            <LoadingScreen />
             <SeoOptimization baseUrl={baseUrl} />
             <Suspense fallback={null}>
               <Analytics />
             </Suspense>
             <PerformanceOptimization />
             <ServiceWorkerRegistration />
-            <div className="flex min-h-screen flex-col w-full p-0 m-0">
+            <div className="flex min-h-screen flex-col">
               <Header />
               <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
-                <div className="flex-1 w-full p-0 m-0">{children}</div>
+                <div className="flex-1">{children}</div>
               </Suspense>
               <Footer />
             </div>

@@ -31,7 +31,7 @@ export function Header() {
   }, [])
 
   return (
-    <header className="floating-header fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300 rounded-full">
+    <header className="floating-header fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300 bg-background/40 backdrop-blur-md border border-white/10 rounded-full shadow-lg">
       <div className="container flex h-16 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-xl font-bold">Fredrick Akojuru</span>
