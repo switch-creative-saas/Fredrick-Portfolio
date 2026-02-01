@@ -59,8 +59,8 @@ export function Hero() {
       </div>
 
       <div className="container px-4 md:px-6 relative z-10 flex items-center pt-32 md:pt-24 pb-20 min-h-screen">
-        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] w-full items-center">
-          <div className="flex flex-col justify-center space-y-4 min-h-full justify-center">
+        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
+          <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none slide-in-left">
                 <span className="typewriter" data-speed="100">
@@ -101,6 +101,7 @@ export function Hero() {
         </div>
       </div>
 
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent"></div>
     </section>
   )
 }
