@@ -12,6 +12,7 @@ import { Suspense } from "react"
 import { HeadTags } from "@/components/head-tags"
 import { PerformanceOptimization } from "@/components/performance-optimization"
 import { ServiceWorkerRegistration } from "./service-worker-registration"
+import { LoadingScreen } from "@/components/loading-screen"
 
 // Optimize font loading
 const inter = Inter({
@@ -27,7 +28,8 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://fredrickakojuru.com
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.jpg",
+    apple: "/favicon.jpg",
   },
   title: {
     default: "Fredrick Akojuru – CTO, Founder, Tech Leader | Full Stack Engineer",
@@ -161,6 +163,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AnimationProvider>
+            <LoadingScreen />
             <SeoOptimization baseUrl={baseUrl} />
             <Suspense fallback={null}>
               <Analytics />
