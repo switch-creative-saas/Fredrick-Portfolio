@@ -50,14 +50,17 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-32 bg-gradient-to-b from-primary/10 to-background">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15),transparent_50%)]"></div>
+    <section className="relative w-full min-h-screen overflow-hidden m-0 p-0 bg-gradient-to-b from-blue-50 via-blue-50 to-blue-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+      {/* Premium gradient overlay */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1),transparent_60%)]"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200/20 dark:bg-blue-900/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/20 dark:bg-blue-800/20 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container px-4 md:px-6 relative z-10">
-        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-          <div className="flex flex-col justify-center space-y-4">
+      <div className="container px-4 md:px-6 relative z-10 flex items-center pt-32 md:pt-24 pb-20 min-h-screen">
+        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] w-full items-center">
+          <div className="flex flex-col justify-center space-y-4 min-h-full justify-center">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none slide-in-left">
                 <span className="typewriter" data-speed="100">
@@ -98,7 +101,6 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent"></div>
     </section>
   )
 }
