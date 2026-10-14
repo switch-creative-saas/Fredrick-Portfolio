@@ -9,8 +9,16 @@ import { EASE } from '@/lib/motion';
 import { site } from '@/content/site';
 import { contactSection } from '@/content/home';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { CONTACT_TOPICS, DEFAULT_TOPIC, contactPage, type ContactTopic } from '@/content/contact';
 
-const Contact = () => {
+interface ContactProps {
+  /** Pre-selected topic, e.g. from the ?topic= query param. */
+  initialTopic?: ContactTopic;
+  /** h1 when the form is the main content of the page. */
+  headingLevel?: 'h1' | 'h2';
+}
+
+const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -19,7 +27,8 @@ const Contact = () => {
 
   const headingWords = contactSection.heading;
 
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  // `company` is a honeypot: hidden from people, often filled in by bots.
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', topic: initialTopic as ContactTopic, company: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
@@ -94,7 +103,7 @@ const Contact = () => {
     { scope: sectionRef, dependencies: [reduced] },
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -148,7 +157,7 @@ const Contact = () => {
       if (response.ok && data.success) {
         setSubmitStatus('success');
         setSuccessMessage(data.message || 'Thank you! Your message has been sent successfully.');
-        setFormData({ name: '', email: '', message: '' });
+        setFormData((prev) => ({ name: '', email: '', message: '', topic: prev.topic, company: '' }));
       } else {
         setSubmitStatus('error');
         if (data?.error) {
@@ -173,6 +182,7 @@ const Contact = () => {
           className="rounded-3xl bg-surface text-light p-8 sm:p-12 md:p-16 lg:p-20 border border-elevated-dark"
         >
           <AnimatedHeading
+            level={headingLevel}
             words={headingWords}
             className="text-[clamp(2.5rem,7vw,6.5rem)] tracking-tight mb-6 text-light"
           />
@@ -230,6 +240,39 @@ const Contact = () => {
                 disabled={isDisabled}
               />
               {errors.email && <p id="email-error" className="text-red-400 text-xs sm:text-sm">{errors.email}</p>}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="topic" className="font-medium text-sm sm:text-base text-muted">
+                {contactPage.topicLabel}
+              </label>
+              <select
+                id="topic"
+                name="topic"
+                value={formData.topic}
+                onChange={handleChange}
+                className="w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30"
+                disabled={isDisabled}
+              >
+                {CONTACT_TOPICS.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div aria-hidden="true" className="absolute -left-[10000px] w-px h-px overflow-hidden">
+              <label htmlFor="company">Company</label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={formData.company}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="flex flex-col gap-2">

@@ -16,6 +16,8 @@ interface AnimatedHeadingProps {
   className?: string;
   containerClassName?: string;
   showLine?: boolean;
+  /** Heading element to render. Use h1 for the main heading of a page. */
+  level?: 'h1' | 'h2';
 }
 
 const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
@@ -24,6 +26,7 @@ const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
   className = '',
   containerClassName = 'mb-8',
   showLine = true,
+  level: Tag = 'h2',
 }) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -90,7 +93,7 @@ const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
 
   return (
     <div ref={rootRef} className={containerClassName}>
-      <h2
+      <Tag
         className={`font-display font-black uppercase tracking-tighter leading-none ${className}`}
         aria-label={plainText}
       >
@@ -111,7 +114,7 @@ const AnimatedHeading: React.FC<AnimatedHeadingProps> = ({
             </span>
           ))}
         </span>
-      </h2>
+      </Tag>
       {showLine && <div className="ah-line h-1 w-24 origin-left bg-gradient-to-r from-accent to-transparent mt-1" />}
     </div>
   );

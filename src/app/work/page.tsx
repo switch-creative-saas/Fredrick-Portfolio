@@ -12,6 +12,7 @@ export const metadata = pageMetadata({
 export default function WorkPage() {
   return (
     <PageShell className="bg-cream pt-16">
+      <h1 className="sr-only">Work</h1>
       <Projects items={getAllProjects()} basePath="/work" />
     </PageShell>
   );

@@ -12,6 +12,7 @@ import { FaArrowUp, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { Project, getAdjacent, getAllProjects } from '@/content/projects';
 import { getAllDesigns } from '@/content/designs';
 import { site } from '@/content/site';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 
 export type ProjectCollection = 'work' | 'design';
 
@@ -29,12 +30,13 @@ interface ProjectDetailsProps {
 export default function ProjectDetails({ project, collection }: ProjectDetailsProps) {
   const rootRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const reduced = useReducedMotion();
   const { basePath, backLabel, items } = COLLECTIONS[collection];
   const { prev, next } = getAdjacent(items(), project.slug);
 
   useGSAP(
     () => {
-      if (!titleRef.current) return;
+      if (reduced || !titleRef.current) return;
 
       const split = SplitText.create(titleRef.current.querySelector('.pd-title-text'), {
         type: 'lines',
@@ -73,7 +75,7 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
 
       return () => split.revert();
     },
-    { scope: rootRef, dependencies: [project.slug] }
+    { scope: rootRef, dependencies: [project.slug, reduced] }
   );
 
   const scrollToTop = () => {

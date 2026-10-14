@@ -6,6 +6,7 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import AnimatedHeading from '@/components/ui/AnimateHeading';
 import ScrollWordReveal from '@/components/ui/ScrollWordReveal';
 import { techStack } from '@/content/home';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 
 const STACK_SECTIONS = techStack.sections;
 
@@ -14,6 +15,7 @@ const TechStack = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRefs = useRef<(HTMLHeadingElement | null)[]>([]);
+  const reduced = useReducedMotion();
 
   const headingWords = techStack.heading;
   const descriptionText = techStack.description;
@@ -30,6 +32,7 @@ const TechStack = () => {
 
   useGSAP(
     () => {
+      if (reduced) return;
       sectionRefs.current.forEach((section, index) => {
         if (!section) return;
         const items = section.querySelectorAll('.tech-item');
@@ -75,7 +78,7 @@ const TechStack = () => {
         }
       });
     },
-    { scope: containerRef, dependencies: [activeFilter] },
+    { scope: containerRef, dependencies: [activeFilter, reduced] },
   );
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {

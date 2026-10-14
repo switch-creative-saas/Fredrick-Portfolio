@@ -318,7 +318,8 @@ const HomeBanner = () => {
                 variant="primary"
               />
               <AnimatedButton
-                onClick={() => handleScroll('contact')}
+                as="a"
+                href={hero.ctas.contact.href}
                 topText={hero.ctas.contact.top}
                 bottomText={hero.ctas.contact.bottom}
                 variant="light"

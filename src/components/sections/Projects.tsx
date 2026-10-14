@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import AnimatedHeading, { type HeadingWord } from '@/components/ui/AnimateHeading';
 import { getAllProjects, Project } from '@/content/projects';
 import { projectsSection } from '@/content/home';
+import { useReducedMotion } from '@/lib/useReducedMotion';
 
 export const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | null>) => {
   const floatingRef = useRef<HTMLDivElement | null>(null);
@@ -230,17 +231,18 @@ export const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | 
 interface MobileSnapProjectsProps {
   projects: Project[];
   router: ReturnType<typeof useRouter>;
-  basePath: string;
+  hrefFor: (project: Project) => string;
   heading: HeadingWord[];
 }
 
-function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapProjectsProps) {
+function MobileSnapProjects({ projects, router, hrefFor, heading }: MobileSnapProjectsProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useGSAP(
     () => {
-      if (!sectionRef.current || !projects.length) return;
+      if (reduced || !sectionRef.current || !projects.length) return;
       const mm = gsap.matchMedia();
 
       mm.add('(max-width: 767px)', () => {
@@ -291,7 +293,7 @@ function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapP
 
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [projects] },
+    { scope: sectionRef, dependencies: [projects, reduced] },
   );
 
   return (
@@ -307,8 +309,8 @@ function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapP
         {projects.map((project, index) => (
           <Link
             key={project.id}
-            href={`${basePath}/${project.slug}`}
-            onTouchStart={() => router.prefetch(`${basePath}/${project.slug}`)}
+            href={hrefFor(project)}
+            onTouchStart={() => router.prefetch(hrefFor(project))}
             ref={(el) => { cardRefs.current[index] = el; }}
             className="overflow-hidden rounded-3xl block no-underline text-inherit"
             style={{ background: '#111110', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
@@ -316,7 +318,7 @@ function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapP
             <div className="p-3 pb-0">
               <div
                 className="mc-img-wrap relative overflow-hidden rounded-2xl"
-                style={{ aspectRatio: '16 / 10', clipPath: 'inset(100% 0 0 0 round 14px)' }}
+                style={{ aspectRatio: '16 / 10', clipPath: reduced ? undefined : 'inset(100% 0 0 0 round 14px)' }}
               >
                 <Image
                   src={project.hoverImage || project.images[0]}
@@ -371,7 +373,7 @@ function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapP
                 {project.title}
               </h3>
 
-              <div className="mc-cta" style={{ opacity: 0 }}>
+              <div className="mc-cta" style={{ opacity: reduced ? 1 : 0 }}>
                 <div className="h-px w-full mb-4" style={{ background: 'rgba(255,255,255,0.07)' }} />
                 <div className="flex items-center justify-between">
                   <span
@@ -399,7 +401,7 @@ function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapP
 interface ProjectsProps {
   /** Items to list. Defaults to every dev project. */
   items?: Project[];
-  /** Route prefix for detail links, e.g. '/work' or '/design'. */
+  /** Route prefix for detail links. When omitted each item links by its category. */
   basePath?: string;
   heading?: HeadingWord[];
   /** Section id, used for in-page anchors. */
@@ -408,13 +410,18 @@ interface ProjectsProps {
 
 export default function ProjectsPage({
   items,
-  basePath = '/work',
+  basePath,
   heading = projectsSection.heading,
   id = 'projects',
 }: ProjectsProps) {
   const router = useRouter();
   const projects = items ?? getAllProjects();
+  const hrefFor = useCallback(
+    (p: Project) => `${basePath ?? (p.category === 'design' ? '/design' : '/work')}/${p.slug}`,
+    [basePath],
+  );
   const containerRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
   const sliderReelRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef<number>(-1);
 
@@ -430,7 +437,7 @@ export default function ProjectsPage({
 
   useGSAP(
     () => {
-      if (projects.length === 0) return;
+      if (reduced || projects.length === 0) return;
       const rows = containerRef.current?.querySelectorAll('.project-row-desktop');
       if (!rows?.length) return;
       rows.forEach((row, index) => {
@@ -443,7 +450,7 @@ export default function ProjectsPage({
         }
       });
     },
-    { scope: containerRef, dependencies: [projects] },
+    { scope: containerRef, dependencies: [projects, reduced] },
   );
 
   const activateRow = useCallback(
@@ -461,7 +468,7 @@ export default function ProjectsPage({
       }
       activeIndexRef.current = index;
 
-      router.prefetch(`${basePath}/${projects[index]?.slug || ''}`);
+      if (projects[index]) router.prefetch(hrefFor(projects[index]));
 
       const rows = containerRef.current.querySelectorAll<HTMLAnchorElement>('.project-row-desktop');
       rows.forEach((row, idx) => {
@@ -487,7 +494,7 @@ export default function ProjectsPage({
 
       show(clientX, clientY);
     },
-    [projects, router, show, basePath],
+    [projects, router, show, hrefFor],
   );
 
   const deactivateAll = useCallback(
@@ -606,7 +613,7 @@ export default function ProjectsPage({
           {projects.map((project, index) => (
             <Link
               key={project.id}
-              href={`${basePath}/${project.slug}`}
+              href={hrefFor(project)}
               className="project-row-desktop relative flex items-stretch border-b border-border py-8 min-h-[120px] group cursor-pointer no-underline"
               onMouseEnter={(e) => {
                 mouse.current.x = e.clientX;
@@ -715,7 +722,7 @@ export default function ProjectsPage({
         </div>
       </div>
 
-      <MobileSnapProjects projects={projects} router={router} basePath={basePath} heading={heading} />
+      <MobileSnapProjects projects={projects} router={router} hrefFor={hrefFor} heading={heading} />
     </section>
   );
 }

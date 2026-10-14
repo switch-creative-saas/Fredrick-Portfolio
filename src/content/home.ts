@@ -13,7 +13,7 @@ export const hero = {
   stampLabel: 'Scroll to contact section',
   ctas: {
     work: { top: 'PROJECTS', bottom: 'VIEW WORK →' },
-    contact: { top: 'CONTACT', bottom: 'GET IN TOUCH →' },
+    contact: { top: 'CONTACT', bottom: 'GET IN TOUCH →', href: '/contact' },
     cv: { top: 'CV', bottom: 'DOWNLOAD →' },
   },
 };
@@ -112,6 +112,61 @@ export const techStack = {
 export const projectsSection = {
   heading: [{ t: 'SELECTED' }, { t: 'works', serif: true }] as HeadingWord[],
   viewLabel: 'View Project',
+};
+
+export interface PathCard {
+  href: string;
+  label: string;
+  sentence: string;
+  image: string;
+}
+
+export const paths = {
+  heading: [{ t: 'FIND' }, { t: 'your', serif: true }, { t: 'WAY' }] as HeadingWord[],
+  exploreLabel: 'Explore',
+  cards: [
+    {
+      href: '/vitalink',
+      label: 'VitaLink',
+      sentence: 'The healthcare operating system and infrastructure platform I am building for Africa.',
+      image: '/work/placeholder.webp', // TODO(fred): VitaLink image
+    },
+    {
+      href: '/work',
+      label: 'Development',
+      sentence: 'Websites and platforms I have built, from a church website to an NGO operations platform.',
+      image: '/work/mountain-of-solution/cover.webp',
+    },
+    {
+      href: '/design',
+      label: 'Design',
+      sentence: 'TODO(fred): one sentence on your design work.',
+      image: '/work/placeholder.webp', // TODO(fred): design image
+    },
+    {
+      href: '/photography',
+      label: 'Photography',
+      sentence: 'TODO(fred): one sentence on your photography.',
+      image: '/work/placeholder.webp', // TODO(fred): photography image
+    },
+  ] as PathCard[],
+};
+
+export const featured = {
+  heading: [{ t: 'FEATURED' }, { t: 'work', serif: true }] as HeadingWord[],
+  allLink: { top: 'ALL WORK', bottom: 'VIEW ALL →', href: '/work' },
+};
+
+export const recognition = {
+  label: '(Recognition)',
+  // Shown after the entries from content/awards.ts.
+  slots: ['TODO(fred): recognition', 'TODO(fred): recognition'],
+};
+
+export const contactCta = {
+  heading: [{ t: "LET'S" }, { t: 'talk', serif: true }] as HeadingWord[],
+  intro: 'Tell me what you are working on and how I can help.',
+  button: { top: 'CONTACT', bottom: 'SEND A MESSAGE →', href: '/contact' },
 };
 
 export const contactSection = {

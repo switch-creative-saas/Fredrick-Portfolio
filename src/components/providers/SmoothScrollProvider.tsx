@@ -21,7 +21,8 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
   useEffect(() => {
     const isTouch =
       typeof window !== 'undefined' &&
-      ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+      ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768 ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
     if (isTouch) {
       aliveRef.current = true;

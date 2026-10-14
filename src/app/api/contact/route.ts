@@ -3,11 +3,15 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 import { site } from '@/content/site';
+import { DEFAULT_TOPIC, isContactTopic, topicLabel, type ContactTopic } from '@/content/contact';
 
 interface ContactRequestBody {
   name?: string;
   email?: string;
   message?: string;
+  topic?: string;
+  /** Honeypot field. Real visitors never see it, so any value means a bot. */
+  company?: string;
 }
 
 const ipCache = new Map<string, { count: number; expires: number }>();
@@ -62,12 +66,16 @@ export async function POST(request: Request) {
   let name = '';
   let email = '';
   let message = '';
+  let topic: ContactTopic = DEFAULT_TOPIC;
+  let honeypot = '';
 
   try {
     const body = (await request.json()) as ContactRequestBody;
     name = body.name || '';
     email = body.email || '';
     message = body.message || '';
+    topic = isContactTopic(body.topic) ? body.topic : DEFAULT_TOPIC;
+    honeypot = typeof body.company === 'string' ? body.company : '';
   } catch {
     return NextResponse.json(
       {
@@ -78,6 +86,11 @@ export async function POST(request: Request) {
         status: 400,
       },
     );
+  }
+
+  // Pretend success so bots get no signal, but send nothing.
+  if (honeypot.trim()) {
+    return NextResponse.json({ success: true, message: 'Thank you! Your message has been sent successfully.' });
   }
 
   try {
@@ -184,6 +197,8 @@ export async function POST(request: Request) {
     const cleanReplyEmail = cleanHeader(email.trim());
     const escapedMessage = escapeHtml(trimmedMessage).replace(/\n/g, '<br>');
     const recipientEmail = process.env.CONTACT_EMAIL || site.email;
+    const subject = `[Portfolio · ${topicLabel(topic)}] ${cleanHeader(trimmedName)}`;
+    const html = `<p><strong>Topic:</strong> ${escapeHtml(topicLabel(topic))}</p><p><strong>Name:</strong> ${escapedName}</p><p><strong>Email:</strong> ${escapeHtml(cleanReplyEmail)}</p><p><strong>Message:</strong></p><p>${escapedMessage}</p>`;
 
     if (process.env.RESEND_API_KEY) {
       const resendRes = await fetch('https://api.resend.com/emails', {
@@ -196,8 +211,8 @@ export async function POST(request: Request) {
           from: 'Portfolio Contact <onboarding@resend.dev>',
           to: [recipientEmail],
           reply_to: cleanReplyEmail,
-          subject: `New message from ${cleanHeader(trimmedName)}`,
-          html: `<p><strong>Name:</strong> ${escapedName}</p><p><strong>Email:</strong> ${escapeHtml(cleanReplyEmail)}</p><p><strong>Message:</strong></p><p>${escapedMessage}</p>`,
+          subject,
+          html,
         }),
       });
 
@@ -214,7 +229,7 @@ export async function POST(request: Request) {
         const logDir = process.cwd();
         const logFile = path.join(logDir, 'messages.txt');
         const timestamp = new Date().toLocaleString('en-US', { timeZone: site.timeZone });
-        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
+        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nTopic: ${topicLabel(topic)}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
         fs.appendFileSync(logFile, logEntry, 'utf8');
 
         return NextResponse.json({
@@ -251,8 +266,8 @@ export async function POST(request: Request) {
       from: `"Portfolio Contact" <${recipientEmail}>`,
       to: recipientEmail,
       replyTo: cleanReplyEmail,
-      subject: `New message from ${cleanHeader(trimmedName)}`,
-      html: `<p><strong>Name:</strong> ${escapedName}</p><p><strong>Email:</strong> ${escapeHtml(cleanReplyEmail)}</p><p><strong>Message:</strong></p><p>${escapedMessage}</p>`,
+      subject,
+      html,
     });
 
     return NextResponse.json({
@@ -267,7 +282,7 @@ export async function POST(request: Request) {
         const logDir = process.cwd();
         const logFile = path.join(logDir, 'messages.txt');
         const timestamp = new Date().toLocaleString('en-US', { timeZone: site.timeZone });
-        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
+        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nTopic: ${topicLabel(topic)}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
         fs.appendFileSync(logFile, logEntry, 'utf8');
 
         return NextResponse.json({

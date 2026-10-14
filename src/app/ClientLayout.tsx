@@ -22,8 +22,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     try {
       seen = sessionStorage.getItem('preloader-seen') === '1';
     } catch {}
+    // Skip the animated preloader entirely for visitors who prefer reduced motion.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (seen) {
+    if (seen || reduced) {
       window.__preloaderDone = true;
       document.body.classList.remove('preloader-active');
       setInstantDone(true);
