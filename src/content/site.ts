@@ -42,9 +42,11 @@ export const socials: Record<SocialKey, SocialLink> = {
 export const socialList: SocialLink[] = [socials.linkedin, socials.github, socials.x, socials.instagram];
 
 export const navLinks: NavLink[] = [
-  { name: 'Home', href: '/#top', menuOnly: true },
-  { name: 'About', href: '/#about' },
-  { name: 'Services', href: '/#services' },
-  { name: 'Work', href: '/#projects' },
-  { name: 'Contact', href: '/#contact' },
+  { name: 'Home', href: '/', menuOnly: true },
+  { name: 'About', href: '/about' },
+  { name: 'VitaLink', href: '/vitalink' },
+  { name: 'Work', href: '/work' },
+  { name: 'Design', href: '/design' },
+  { name: 'Photography', href: '/photography' },
+  { name: 'Contact', href: '/contact' },
 ];

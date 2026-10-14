@@ -226,11 +226,12 @@ export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
 
-export function getAdjacentProjects(slug: string): { prev?: Project; next?: Project } {
-  const idx = projects.findIndex((p) => p.slug === slug);
-  if (idx === -1) return {};
+/** Previous and next items within one collection, wrapping around. None when the collection has one item. */
+export function getAdjacent(items: Project[], slug: string): { prev?: Project; next?: Project } {
+  const idx = items.findIndex((p) => p.slug === slug);
+  if (idx === -1 || items.length < 2) return {};
   return {
-    prev: projects[(idx - 1 + projects.length) % projects.length],
-    next: projects[(idx + 1) % projects.length],
+    prev: items[(idx - 1 + items.length) % items.length],
+    next: items[(idx + 1) % items.length],
   };
 }

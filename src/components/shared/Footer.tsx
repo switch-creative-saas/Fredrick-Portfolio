@@ -72,6 +72,7 @@ const Footer = () => {
                 <AnimatedLink key={link.href}>
                   <a
                     href={link.href}
+                    data-transition-ignore
                     onClick={(e) => {
                       e.preventDefault();
                       handleLinkClick(link.href);

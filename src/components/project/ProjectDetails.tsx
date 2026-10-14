@@ -9,14 +9,28 @@ import AnimatedButton from '@/components/ui/AnimatedButton';
 import { gsap, SplitText, useGSAP } from '@/lib/gsap';
 import { EASE } from '@/lib/motion';
 import { FaArrowUp, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import { Project } from '@/content/projects';
-import { getAdjacentProjects } from '@/content/projects';
+import { Project, getAdjacent, getAllProjects } from '@/content/projects';
+import { getAllDesigns } from '@/content/designs';
 import { site } from '@/content/site';
 
-export default function ProjectDetails({ project }: { project: Project }) {
+export type ProjectCollection = 'work' | 'design';
+
+const COLLECTIONS: Record<ProjectCollection, { basePath: string; backLabel: string; items: () => Project[] }> = {
+  work: { basePath: '/work', backLabel: 'Back to Work', items: getAllProjects },
+  design: { basePath: '/design', backLabel: 'Back to Design', items: getAllDesigns },
+};
+
+interface ProjectDetailsProps {
+  project: Project;
+  /** Which collection the project belongs to. Prev/next links stay inside it. */
+  collection: ProjectCollection;
+}
+
+export default function ProjectDetails({ project, collection }: ProjectDetailsProps) {
   const rootRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const { prev, next } = getAdjacentProjects(project.slug);
+  const { basePath, backLabel, items } = COLLECTIONS[collection];
+  const { prev, next } = getAdjacent(items(), project.slug);
 
   useGSAP(
     () => {
@@ -76,13 +90,13 @@ export default function ProjectDetails({ project }: { project: Project }) {
       <div className="max-w-6xl mx-auto">
         <div className="mb-8 sm:mb-12 md:mb-16">
           <Link
-            href="/"
+            href={basePath}
             className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors duration-200 group"
           >
             <span className="text-base sm:text-lg transform group-hover:-translate-x-1 transition-transform duration-200">
               ←
             </span>
-            <span className="font-mono text-xs uppercase tracking-widest">Back to Projects</span>
+            <span className="font-mono text-xs uppercase tracking-widest">{backLabel}</span>
           </Link>
         </div>
 
@@ -344,7 +358,7 @@ export default function ProjectDetails({ project }: { project: Project }) {
         <nav aria-label="Project navigation" className="grid grid-cols-1 md:grid-cols-2 border-t border-white/[0.08] mb-12 sm:mb-16">
           {prev && (
             <Link
-              href={`/projects/${prev.slug}`}
+              href={`${basePath}/${prev.slug}`}
               className="group py-6 sm:py-10 md:py-14 md:pr-10 border-b md:border-b-0 md:border-r border-white/[0.08] no-underline"
             >
               <p className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-muted mb-2 sm:mb-3 flex items-center gap-2">
@@ -358,7 +372,7 @@ export default function ProjectDetails({ project }: { project: Project }) {
           )}
           {next && (
             <Link
-              href={`/projects/${next.slug}`}
+              href={`${basePath}/${next.slug}`}
               className={`group py-6 sm:py-10 md:py-14 md:pl-10 no-underline text-right items-end ${
                 prev ? '' : 'md:col-span-2'
               }`}

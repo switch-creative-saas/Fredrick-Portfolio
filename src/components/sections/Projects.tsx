@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { Link } from 'next-transition-router';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useRouter } from 'next/navigation';
-import AnimatedHeading from '@/components/ui/AnimateHeading';
+import AnimatedHeading, { type HeadingWord } from '@/components/ui/AnimateHeading';
 import { getAllProjects, Project } from '@/content/projects';
 import { projectsSection } from '@/content/home';
 
-const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | null>) => {
+export const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | null>) => {
   const floatingRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
   const imageContainerRef = useRef<HTMLDivElement | null>(null);
@@ -230,9 +230,11 @@ const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | null>) 
 interface MobileSnapProjectsProps {
   projects: Project[];
   router: ReturnType<typeof useRouter>;
+  basePath: string;
+  heading: HeadingWord[];
 }
 
-function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
+function MobileSnapProjects({ projects, router, basePath, heading }: MobileSnapProjectsProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
@@ -296,7 +298,7 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
     <div ref={sectionRef} className="md:hidden bg-cream pb-12">
       <div className="px-6 pt-16 pb-8">
         <AnimatedHeading
-          words={projectsSection.heading}
+          words={heading}
           className="text-[clamp(3rem,14vw,5rem)] leading-none text-charcoal"
         />
       </div>
@@ -305,15 +307,8 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
         {projects.map((project, index) => (
           <Link
             key={project.id}
-            href={`/projects/${project.slug}`}
-            onTouchStart={() => router.prefetch(`/projects/${project.slug}`)}
-            onClick={() => {
-              const scrollY = (window as any).__lenis
-                ? Math.round((window as any).__lenis.scroll)
-                : Math.round(window.scrollY);
-              sessionStorage.setItem('projects-scroll', scrollY.toString());
-              sessionStorage.setItem('previous-project-url', window.location.pathname);
-            }}
+            href={`${basePath}/${project.slug}`}
+            onTouchStart={() => router.prefetch(`${basePath}/${project.slug}`)}
             ref={(el) => { cardRefs.current[index] = el; }}
             className="overflow-hidden rounded-3xl block no-underline text-inherit"
             style={{ background: '#111110', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
@@ -401,9 +396,24 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
   );
 }
 
-export default function ProjectsPage() {
+interface ProjectsProps {
+  /** Items to list. Defaults to every dev project. */
+  items?: Project[];
+  /** Route prefix for detail links, e.g. '/work' or '/design'. */
+  basePath?: string;
+  heading?: HeadingWord[];
+  /** Section id, used for in-page anchors. */
+  id?: string;
+}
+
+export default function ProjectsPage({
+  items,
+  basePath = '/work',
+  heading = projectsSection.heading,
+  id = 'projects',
+}: ProjectsProps) {
   const router = useRouter();
-  const projects = getAllProjects();
+  const projects = items ?? getAllProjects();
   const containerRef = useRef<HTMLDivElement>(null);
   const sliderReelRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef<number>(-1);
@@ -451,7 +461,7 @@ export default function ProjectsPage() {
       }
       activeIndexRef.current = index;
 
-      router.prefetch(`/projects/${projects[index]?.slug || ''}`);
+      router.prefetch(`${basePath}/${projects[index]?.slug || ''}`);
 
       const rows = containerRef.current.querySelectorAll<HTMLAnchorElement>('.project-row-desktop');
       rows.forEach((row, idx) => {
@@ -477,7 +487,7 @@ export default function ProjectsPage() {
 
       show(clientX, clientY);
     },
-    [projects, router, show],
+    [projects, router, show, basePath],
   );
 
   const deactivateAll = useCallback(
@@ -574,16 +584,11 @@ export default function ProjectsPage() {
     const line = row.querySelector('.hover-line-ref');
     if (line) gsap.to(line, { width: '100%', duration: 0.15, ease: 'power2.out' });
     gsap.to(row, { backgroundColor: 'rgba(196, 93, 62, 0.04)', duration: 0.15, ease: 'power2.out' });
-    const scrollY = (window as any).__lenis
-      ? Math.round((window as any).__lenis.scroll)
-      : Math.round(window.scrollY);
-    sessionStorage.setItem('projects-scroll', scrollY.toString());
-    sessionStorage.setItem('previous-project-url', window.location.pathname);
   };
 
   return (
     <section
-      id="projects"
+      id={id}
       ref={containerRef}
       onMouseLeave={handleTableMouseLeave}
       className="relative w-full bg-cream text-charcoal overflow-hidden"
@@ -591,7 +596,7 @@ export default function ProjectsPage() {
       <div className="hidden md:block pt-16 pb-20 md:pt-20 md:pb-24 px-6 sm:px-8 md:px-12 lg:px-16 max-w-7xl mx-auto">
         <div className="mb-12">
           <AnimatedHeading
-            words={projectsSection.heading}
+            words={heading}
             className="text-[clamp(2.5rem,7vw,6.5rem)] leading-none text-charcoal"
           />
         </div>
@@ -601,7 +606,7 @@ export default function ProjectsPage() {
           {projects.map((project, index) => (
             <Link
               key={project.id}
-              href={`/projects/${project.slug}`}
+              href={`${basePath}/${project.slug}`}
               className="project-row-desktop relative flex items-stretch border-b border-border py-8 min-h-[120px] group cursor-pointer no-underline"
               onMouseEnter={(e) => {
                 mouse.current.x = e.clientX;
@@ -710,7 +715,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      <MobileSnapProjects projects={projects} router={router} />
+      <MobileSnapProjects projects={projects} router={router} basePath={basePath} heading={heading} />
     </section>
   );
 }

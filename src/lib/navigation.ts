@@ -1,28 +1,17 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from 'next-transition-router';
 import { useLenis } from '@/components/providers/SmoothScrollProvider';
 import Lenis from 'lenis';
+import { normalizePath } from '@/lib/routes';
 
+/**
+ * Finds the element for an in-page anchor. A section can opt into a wider scroll
+ * target by wrapping itself in an element with id `<id>-section-wrapper`.
+ */
 export const getSectionElement = (targetId: string): HTMLElement | null => {
   if (!targetId || targetId === 'top' || targetId === 'home') return null;
-  const id = targetId.toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (id === 'about') {
-    return document.getElementById('about-section-wrapper') || document.getElementById('about');
-  }
-  if (id === 'services' || id === 'whatido') {
-    return document.getElementById('services');
-  }
-  if (id === 'projects' || id === 'work') {
-    return document.getElementById('projects');
-  }
-  if (id === 'contact' || id === 'getintouch') {
-    return document.getElementById('contact');
-  }
-  if (id === 'techstack' || id === 'stack') {
-    return document.getElementById('tech-stack') || document.getElementById('TechStack');
-  }
-  return document.getElementById(targetId);
+  return document.getElementById(`${targetId}-section-wrapper`) || document.getElementById(targetId);
 };
 
 export const scrollToSection = (targetId: string, lenis?: Lenis | null) => {
@@ -66,8 +55,14 @@ export const scrollToSection = (targetId: string, lenis?: Lenis | null) => {
   tryScroll();
 };
 
+/**
+ * Click handler for nav links. Links to another page go through the transition
+ * router (so the curtain plays); links to the current page scroll in place.
+ * Give the anchor `data-transition-ignore` so the router's auto mode does not
+ * handle the same click twice.
+ */
 export const useHandleLinkClick = (setIsMenuOpen?: (isOpen: boolean) => void) => {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const lenisRef = useLenis() as React.RefObject<Lenis | null> | null;
 
   return (href: string) => {
@@ -81,33 +76,17 @@ export const useHandleLinkClick = (setIsMenuOpen?: (isOpen: boolean) => void) =>
       }
     });
 
-    let targetPath = '/';
-    let targetId = '';
+    const [rawPath, targetId = ''] = href.split('#');
+    const targetPath = normalizePath(rawPath || '/');
+    const currentPath = typeof window !== 'undefined' ? normalizePath(window.location.pathname) : '/';
 
-    if (href.includes('#')) {
-      const parts = href.split('#');
-      targetPath = parts[0] || '/';
-      targetId = parts[1] || '';
-    } else if (href.startsWith('/')) {
-      targetPath = href;
-    } else {
-      targetId = href;
-    }
-
-    const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
-
-    const isCurrentPage =
-      targetPath === currentPath ||
-      (targetPath === '/' && (currentPath === '' || currentPath === '/')) ||
-      (targetPath === '' && (currentPath === '' || currentPath === '/'));
-
-    if (!isCurrentPage) {
+    if (targetPath !== currentPath) {
       if (typeof window !== 'undefined' && targetId) {
         try {
           sessionStorage.setItem('nav_target_section', targetId);
         } catch {}
       }
-      router.push(targetPath || '/', { scroll: false });
+      router.push(targetPath);
       return;
     }
 
@@ -118,9 +97,8 @@ export const useHandleLinkClick = (setIsMenuOpen?: (isOpen: boolean) => void) =>
 
     scrollToSection(targetId, lenis);
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
     }
   };
 };
-

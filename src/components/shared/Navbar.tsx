@@ -8,9 +8,16 @@ import AnimatedLink from '@/components/ui/AnimateLink';
 import { useHandleLinkClick } from '@/lib/navigation';
 import { site, socials, navLinks } from '@/content/site';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 import { Copyright } from 'lucide-react';
 import Magnetic from '@/components/ui/Magnetic';
+import { isActiveRoute } from '@/lib/routes';
+
+/** Below this width the top bar has no room for every link, so the hamburger stays visible. */
+const isCompactViewport = () => window.innerWidth < 1024;
+/** Scroll distance after which the hamburger appears on pages without the home About section. */
+const HAMBURGER_REVEAL_OFFSET = 80;
 
 interface MagneticHamburgerButtonProps {
   isOpen: boolean;
@@ -124,10 +131,11 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({ logoRef, handleLinkClick }) =
     <Magnetic strength={0.3}>
       <Link
         ref={logoRef as any}
-        href="/#top"
+        href="/"
+        data-transition-ignore
         onClick={(e) => {
           e.preventDefault();
-          handleLinkClick('/#top');
+          handleLinkClick('/');
         }}
         className="group flex items-center cursor-pointer select-none py-1 text-warm"
         aria-label={`${site.name} home`}
@@ -162,9 +170,10 @@ interface FullscreenMenuProps {
   onClose: () => void;
   handleLinkClick: (href: string) => void;
   links: LinkItem[];
+  pathname: string;
 }
 
-const FullscreenMenu: React.FC<FullscreenMenuProps> = ({ isOpen, onClose, handleLinkClick, links }) => {
+const FullscreenMenu: React.FC<FullscreenMenuProps> = ({ isOpen, onClose, handleLinkClick, links, pathname }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -410,35 +419,45 @@ const FullscreenMenu: React.FC<FullscreenMenuProps> = ({ isOpen, onClose, handle
           </div>
 
           <nav className="absolute top-[80px] bottom-[170px] md:bottom-[100px] left-0 right-0 flex flex-col justify-center px-8 sm:px-10 md:px-14 gap-2 md:gap-3">
-            {links.map((link, i) => (
-              <div
-                key={link.href}
-                ref={(el) => { linkRowRefs.current[i] = el; }}
-                className="overflow-hidden py-1.5 md:py-2"
-              >
+            {links.map((link, i) => {
+              const active = isActiveRoute(link.href, pathname);
+              return (
                 <div
-                  ref={(el) => { magnetRefs.current[i] = el; }}
-                  onMouseMove={(e) => handleMagneticMouseMove(e, i)}
-                  onMouseLeave={() => handleMagneticMouseLeave(i)}
-                  className="inline-block"
+                  key={link.href}
+                  ref={(el) => { linkRowRefs.current[i] = el; }}
+                  className="overflow-hidden py-1 md:py-1.5"
                 >
-                  <button
-                    onClick={() => handleLinkClick(link.href)}
-                    className="group flex items-center gap-4 md:gap-6 text-left animate-link-row"
+                  <div
+                    ref={(el) => { magnetRefs.current[i] = el; }}
+                    onMouseMove={(e) => handleMagneticMouseMove(e, i)}
+                    onMouseLeave={() => handleMagneticMouseLeave(i)}
+                    className="inline-block"
                   >
-                    <span className="text-gray-mid font-mono text-xs md:text-sm transition-colors duration-300 group-hover:text-accent">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="font-display text-[2.8rem] sm:text-[3.4rem] md:text-[3.8rem] lg:text-[4.4rem] xl:text-[4.8rem] font-black uppercase leading-none tracking-tight text-cream group-hover:text-accent transition-colors duration-300 flex overflow-hidden">
-                      {link.name}
-                    </span>
-                    <span className="text-accent text-2xl md:text-3xl lg:text-4xl opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0">
-                      →
-                    </span>
-                  </button>
+                    <a
+                      href={link.href}
+                      data-transition-ignore
+                      aria-current={active ? 'page' : undefined}
+                      tabIndex={isOpen ? 0 : -1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleLinkClick(link.href);
+                      }}
+                      className="group flex items-center gap-4 md:gap-6 text-left animate-link-row"
+                    >
+                      <span className={`font-mono text-xs md:text-sm transition-colors duration-300 group-hover:text-accent ${active ? 'text-accent' : 'text-gray-mid'}`}>
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className={`font-display text-[min(5.6vh,9.5vw,4.4rem)] font-black uppercase leading-none tracking-tight group-hover:text-accent transition-colors duration-300 flex overflow-hidden ${active ? 'text-accent' : 'text-cream'}`}>
+                        {link.name}
+                      </span>
+                      <span className={`text-accent text-2xl md:text-3xl lg:text-4xl transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${active ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
+                        →
+                      </span>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </nav>
 
           <div
@@ -568,21 +587,19 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
     gsap.set(nav, { y: -120 * scrollProgress, opacity: 1 });
     if (mobileNav) gsap.set(mobileNav, { y: -190 * scrollProgress, opacity: 1 });
 
-    const isMobile = window.innerWidth < 768;
-    if (isMobile) {
+    if (isCompactViewport()) {
       gsap.set(hamburger, { opacity: 1, scale: 1 });
     } else {
+      // Home reveals the hamburger at the About section; other pages once the top bar has slid away.
       const aboutWrapper = document.getElementById('about-section-wrapper');
-      if (aboutWrapper) {
-        const aboutTop = aboutWrapper.getBoundingClientRect().top + scrollY;
-        const shouldShowHamburger = scrollY >= aboutTop;
-        gsap.set(hamburger, {
-          opacity: shouldShowHamburger ? 1 : 0,
-          scale: shouldShowHamburger ? 1 : 0,
-        });
-      } else {
-        gsap.set(hamburger, { opacity: 0, scale: 0 });
-      }
+      const revealAt = aboutWrapper
+        ? aboutWrapper.getBoundingClientRect().top + scrollY
+        : HAMBURGER_REVEAL_OFFSET;
+      const shouldShowHamburger = scrollY >= revealAt;
+      gsap.set(hamburger, {
+        opacity: shouldShowHamburger ? 1 : 0,
+        scale: shouldShowHamburger ? 1 : 0,
+      });
     }
   }, [hamburgerOnly]);
 
@@ -595,7 +612,7 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
     const mobileNav = mobileNavRef.current;
     if (!nav || !hamburger) return;
 
-    const isMobile = window.innerWidth < 768;
+    const isCompact = isCompactViewport();
 
     const scrollTrigger = ScrollTrigger.create({
       trigger: 'body',
@@ -612,11 +629,11 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
     const aboutWrapper = document.getElementById('about-section-wrapper');
     let aboutTrigger: ScrollTrigger | null = null;
 
-    if (aboutWrapper && !isMobile) {
+    if (!isCompact) {
       aboutTrigger = ScrollTrigger.create({
-        trigger: aboutWrapper,
-        start: 'top top',
-        end: 'top -200px',
+        trigger: aboutWrapper ?? 'body',
+        start: aboutWrapper ? 'top top' : `top -${HAMBURGER_REVEAL_OFFSET}px`,
+        end: aboutWrapper ? 'top -200px' : `top -${HAMBURGER_REVEAL_OFFSET + 200}px`,
         onEnter: () => {
           gsap.to(hamburger, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' });
         },
@@ -624,7 +641,7 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
           gsap.to(hamburger, { opacity: 0, scale: 0, duration: 0.3, ease: 'power2.in' });
         },
       });
-    } else if (isMobile) {
+    } else {
       gsap.set(hamburger, { opacity: 1, scale: 1 });
     }
 
@@ -658,6 +675,7 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
   const handleLinkClick = useHandleLinkClick(setIsMenuOpen);
 
   const links = navLinks;
+  const pathname = usePathname() || '/';
 
   const navStyle: React.CSSProperties = {
     opacity: isTransitioning ? 0 : 1,
@@ -677,21 +695,26 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
             <NavbarBrand logoRef={logoRef} handleLinkClick={handleLinkClick} />
             <ul
               ref={linksContainerRef}
-              className="flex gap-6 text-warm text-base font-sans font-medium uppercase tracking-wider"
+              className="hidden lg:flex gap-6 text-warm text-base font-sans font-medium uppercase tracking-wider"
             >
-              {links.filter((l) => !l.menuOnly).map((link) => (
-                <AnimatedLink key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLinkClick(link.href);
-                    }}
-                  >
-                    {link.name}
-                  </a>
-                </AnimatedLink>
-              ))}
+              {links.filter((l) => !l.menuOnly).map((link) => {
+                const active = isActiveRoute(link.href, pathname);
+                return (
+                  <AnimatedLink key={link.href} className={active ? 'text-accent' : ''}>
+                    <a
+                      href={link.href}
+                      data-transition-ignore
+                      aria-current={active ? 'page' : undefined}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleLinkClick(link.href);
+                      }}
+                    >
+                      {link.name}
+                    </a>
+                  </AnimatedLink>
+                );
+              })}
             </ul>
           </div>
         </nav>
@@ -732,6 +755,7 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
         onClose={() => setIsMenuOpen(false)}
         handleLinkClick={handleLinkClick}
         links={links}
+        pathname={pathname}
       />
     </>
   );
