@@ -9,6 +9,11 @@ import Lenis from 'lenis';
 import { safeSessionStorage } from '@/utils/storage';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 import { isDetailRoute, isIndexRoute, normalizePath, scrollKey } from '@/lib/routes';
+import RoutePrefetcher from '@/components/providers/RoutePrefetcher';
+
+/** Curtain timing. Each layer takes CURTAIN_S and the second starts halfway through the first. */
+const CURTAIN_S = 0.32;
+const CURTAIN_COVERED_AT = CURTAIN_S * 1.5;
 
 declare global {
   interface Window {
@@ -144,8 +149,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         },
       });
 
-      tl.fromTo(secondLayer.current, { y: '0%' }, { y: '-100%', duration: 0.45, ease: 'circ.inOut' })
-        .fromTo(firstLayer.current, { y: '0%' }, { y: '-100%', duration: 0.45, ease: 'circ.inOut' }, '<50%');
+      tl.fromTo(secondLayer.current, { y: '0%' }, { y: '-100%', duration: CURTAIN_S, ease: 'circ.inOut' })
+        .fromTo(firstLayer.current, { y: '0%' }, { y: '-100%', duration: CURTAIN_S, ease: 'circ.inOut' }, '<50%');
     };
 
     const goBack = () => {
@@ -168,8 +173,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       }
 
       const tl = gsap.timeline({ onComplete: goBack });
-      tl.fromTo(firstLayer.current, { y: '100%' }, { y: '0%', duration: 0.45, ease: 'circ.inOut' })
-        .fromTo(secondLayer.current, { y: '100%' }, { y: '0%', duration: 0.45, ease: 'circ.inOut' }, '<50%');
+      tl.fromTo(firstLayer.current, { y: '100%' }, { y: '0%', duration: CURTAIN_S, ease: 'circ.inOut' })
+        .fromTo(secondLayer.current, { y: '100%' }, { y: '0%', duration: CURTAIN_S, ease: 'circ.inOut' }, '<50%');
     };
 
     const handlePopState = (event: PopStateEvent) => {
@@ -228,18 +233,18 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           .fromTo(
             firstLayer.current,
             { y: '100%' },
-            { y: '0%', duration: 0.5, ease: 'circ.inOut' }
+            { y: '0%', duration: CURTAIN_S, ease: 'circ.inOut' }
           )
           .fromTo(
             secondLayer.current,
             { y: '100%' },
-            { y: '0%', duration: 0.5, ease: 'circ.inOut' },
+            { y: '0%', duration: CURTAIN_S, ease: 'circ.inOut' },
             '<50%'
           );
 
         tl.add(() => {
           setScrollNow(scrollTargetRef.current);
-        }, 0.5);
+        }, CURTAIN_COVERED_AT);
 
         return () => {
           tl.kill();
@@ -281,12 +286,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           .fromTo(
             secondLayer.current,
             { y: '0%' },
-            { y: '-100%', duration: 0.5, ease: 'circ.inOut' }
+            { y: '-100%', duration: CURTAIN_S, ease: 'circ.inOut' }
           )
           .fromTo(
             firstLayer.current,
             { y: '0%' },
-            { y: '-100%', duration: 0.5, ease: 'circ.inOut' },
+            { y: '-100%', duration: CURTAIN_S, ease: 'circ.inOut' },
             '<50%'
           )
           .call(() => {
@@ -307,6 +312,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         };
       }}
     >
+      <RoutePrefetcher />
       <main id="main-content">{children}</main>
 
       <div

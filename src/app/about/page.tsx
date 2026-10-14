@@ -4,6 +4,8 @@ import AnimatedHeading from '@/components/ui/AnimateHeading';
 import ScrollWordReveal from '@/components/ui/ScrollWordReveal';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import CredentialTimeline from '@/components/sections/CredentialTimeline';
+import Services from '@/components/sections/Services';
+import TechStack from '@/components/sections/TechStack';
 import { credentialsFromTimeline } from '@/content/credentials';
 import { about, researchStatusLabel } from '@/content/about';
 import { research } from '@/content/research';
@@ -13,7 +15,7 @@ import { pageMetadata } from '@/lib/metadata';
 
 export const metadata = pageMetadata({
   title: 'About',
-  description: `About ${site.name}: public health student at Miva Open University, founder of VitaLink, and developer based in ${site.location}.`,
+  description: `About ${site.name}: public health student at Miva Open University, founder and CEO of VitaLink, software developer, designer and photographer based in ${site.location}.`,
   path: '/about',
 });
 
@@ -30,7 +32,7 @@ export default function AboutPage() {
         <div className="mt-12 md:mt-20 grid grid-cols-12 gap-8 md:gap-12 items-start">
           <div className="col-span-12 md:col-span-5">
             <div className="relative w-full max-w-[380px] aspect-[4/5] rounded-2xl overflow-hidden border border-border-subtler bg-elevated-dark shadow-2xl">
-              <Image src={site.photo} alt={about.photoAlt} fill priority sizes="(max-width: 768px) 100vw, 380px" className="object-cover" />
+              <Image src={site.photo} alt={about.photoAlt} fill priority sizes="(max-width: 768px) 100vw, 380px" className="object-cover object-[50%_35%]" />
             </div>
           </div>
 
@@ -59,7 +61,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className={`${sectionPad} pb-16 md:pb-24`}>
+      <Services />
+      <TechStack />
+
+      <section className={`${sectionPad} pt-16 md:pt-24 pb-16 md:pb-24`}>
         <CredentialTimeline
           items={credentialsFromTimeline('education')}
           label={about.educationLabel}
@@ -74,11 +79,11 @@ export default function AboutPage() {
             <AnimatedHeading words={about.researchHeading} className="text-[clamp(2.25rem,6vw,5.5rem)] tracking-tight" />
           </div>
           <ul className="divide-y divide-border-subtle border-t border-b border-border-subtle">
-            {research.map((item) => (
+            {research.filter((item) => item.kind !== 'hackathon').map((item) => (
               <li key={item.id} className="py-6 md:py-8 grid md:grid-cols-12 gap-3 md:gap-8">
                 <div className="md:col-span-3 font-mono text-xs uppercase tracking-widest text-gray-soft space-y-1">
-                  <p>{item.year ?? 'TODO(fred): year'}</p>
-                  <p className="text-accent">{item.status ? researchStatusLabel[item.status] : 'TODO(fred): status'}</p>
+                  {item.year && <p>{item.year}</p>}
+                  {item.status && <p className="text-accent">{researchStatusLabel[item.status]}</p>}
                 </div>
                 <div className="md:col-span-9">
                   <h3 className="font-display text-xl md:text-3xl font-bold tracking-tight leading-tight text-cream">

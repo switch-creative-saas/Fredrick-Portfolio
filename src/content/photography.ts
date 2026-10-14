@@ -28,9 +28,10 @@ export interface PhotoSeries {
 
 export const photographyPage = {
   heading: [{ t: 'PHOTO' }, { t: 'graphy', serif: true }] as HeadingWord[],
-  intro: 'TODO(fred): one or two sentences on what you photograph.',
+  // TODO(fred): confirm what you photograph.
+  intro: 'Portraits, events and organisation shoots in Abuja. The gallery is being curated, and bookings are open.',
   allLabel: 'All',
-  comingSoon: 'Selected work coming soon.',
+  comingSoon: 'The gallery is on the way.',
   bookingCta: { top: 'BOOK A SHOOT', bottom: 'CONTACT →', href: '/contact?topic=photography' },
   lightbox: { close: 'Close', previous: 'Previous photo', next: 'Next photo' },
 };

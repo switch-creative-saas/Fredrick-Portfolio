@@ -29,7 +29,7 @@ export const site = {
   tagline: 'Public health student building VitaLink, healthcare infrastructure for Africa.',
   roles: ['Founder, VitaLink', 'Public Health, Miva', 'Developer', 'Designer', 'Photographer'],
   cvPath: '/fredrick-akojuru-cv.pdf',
-  photo: '/images/fredrick-akojuru.webp',
+  photo: '/images/fredrick-akojuru-portrait.webp',
   // Words cycled by the preloader before the site appears.
   // TODO(fred): confirm these greetings (English, Hausa, Igbo, Yoruba) or replace with your own.
   greetings: ['Hello', 'Sannu', 'Ndewo', 'Ẹ n lẹ', 'Welcome'],

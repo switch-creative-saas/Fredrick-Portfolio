@@ -55,7 +55,7 @@ export default function CvPage() {
               <Entry
                 key={r.id}
                 title={r.title}
-                meta={`${r.year ?? 'TODO(fred): year'} · ${r.status ? researchStatusLabel[r.status] : 'TODO(fred): status'}`}
+                meta={[r.year, r.status ? researchStatusLabel[r.status] : null].filter(Boolean).join(' · ')}
                 detail={[r.summary, r.venue].filter(Boolean).join(' ')}
               />
             ))}

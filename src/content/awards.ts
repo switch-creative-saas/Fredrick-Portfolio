@@ -15,7 +15,6 @@ export const awards: Award[] = [
     event: 'ISS 2026 AI Hackathon',
     organizer: 'IHVN / IRCE 4th Annual Scientific Symposium',
     year: 2026,
-    detail: 'Track 1: AI-assisted infectious disease screening.',
+    detail: 'Track 1: AI-assisted infectious disease screening, built in Python and Streamlit on a dataset released at the event.',
   },
-  // TODO(fred): add other awards, scholarships or recognition.
 ];
