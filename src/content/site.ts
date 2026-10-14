@@ -31,6 +31,7 @@ export const site = {
   cvPath: '/fredrick-akojuru-cv.pdf',
   photo: '/images/fredrick-akojuru.webp',
   // Words cycled by the preloader before the site appears.
+  // TODO(fred): confirm these greetings (English, Hausa, Igbo, Yoruba) or replace with your own.
   greetings: ['Hello', 'Sannu', 'Ndewo', 'Ẹ n lẹ', 'Welcome'],
 };
 
@@ -44,6 +45,20 @@ export const socials: Record<SocialKey, SocialLink> = {
 };
 
 export const socialList: SocialLink[] = [socials.linkedin, socials.github, socials.x, socials.instagram];
+
+export const footer = {
+  legalLinks: [
+    { name: 'CV', href: '/cv' },
+    { name: 'Privacy', href: '/privacy-policy' },
+    { name: 'Terms', href: '/terms-of-service' },
+  ],
+  // The MIT license asks that the original author is credited.
+  credit: {
+    text: 'Built on an open-source template by',
+    author: 'Aitezaz Sikandar',
+    href: 'https://github.com/aitezazdev/Portfolio',
+  },
+};
 
 /** A portfolio section is promoted (navbar, home, sitemap) only once it has this many real items. */
 export const MIN_PORTFOLIO_ITEMS = 6;

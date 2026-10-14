@@ -71,8 +71,8 @@ export default function Paths() {
               className="path-card group relative flex flex-col justify-between min-h-[260px] md:min-h-[340px] rounded-3xl border border-border bg-cream p-6 sm:p-8 md:p-10 no-underline overflow-hidden transition-colors duration-300 hover:border-charcoal"
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[13px] text-gray-soft">{String(index + 1).padStart(2, '0')}</span>
-                <span className="font-mono text-xs uppercase tracking-widest text-charcoal transition-colors duration-300 group-hover:text-accent">
+                <span className="font-mono text-[13px] text-warm">{String(index + 1).padStart(2, '0')}</span>
+                <span className="font-mono text-xs uppercase tracking-widest text-charcoal transition-colors duration-300 group-hover:text-accent-muted">
                   {paths.exploreLabel} <span className="inline-block transition-transform duration-200 group-hover:translate-x-1.5">→</span>
                 </span>
               </div>

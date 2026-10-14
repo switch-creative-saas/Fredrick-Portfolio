@@ -3,6 +3,7 @@
 import React, { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { hexToRgba, themeColor, themeRgba } from '@/lib/theme';
 
 interface ScrollWordRevealProps {
   text: string;
@@ -30,21 +31,14 @@ const tokenize = (text: string): Token[] => {
   return tokens;
 };
 
-const hexToRgba = (hex: string, alpha: number): string => {
-  const h = hex.replace('#', '');
-  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
-  const num = parseInt(full, 16);
-  return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
-};
-
 export const ScrollWordReveal: React.FC<ScrollWordRevealProps> = ({
   text,
   className = '',
   dimOpacity = 0.22,
   offset = ['start 0.99', 'end 0.85'],
-  highlightColor = '#E2E8E4',
-  dimColor = 'rgba(226, 232, 228, 0.22)',
-  accentColor = '#34D399',
+  highlightColor,
+  dimColor,
+  accentColor,
 }) => {
   const containerRef = useRef<HTMLParagraphElement>(null);
   const reduced = useReducedMotion();
@@ -66,6 +60,11 @@ export const ScrollWordReveal: React.FC<ScrollWordRevealProps> = ({
       const wordEls = el.querySelectorAll<HTMLSpanElement>('.swr-word');
       if (!wordEls.length) return;
 
+      // Defaults come from the theme tokens so the reveal follows the palette.
+      const accent = accentColor ?? themeColor('accent');
+      const highlight = highlightColor ?? themeColor('cream');
+      const dim = dimColor ?? themeRgba('cream', 0.22);
+
       const isTouch =
         typeof window !== 'undefined' &&
         ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
@@ -77,8 +76,8 @@ export const ScrollWordReveal: React.FC<ScrollWordRevealProps> = ({
         transformOrigin: '50% 100%',
         color: (i: number, target: Element) =>
           (target as HTMLElement).dataset.accent === 'true'
-            ? hexToRgba(accentColor, Math.max(dimOpacity, 0.3))
-            : dimColor,
+            ? hexToRgba(accent, Math.max(dimOpacity, 0.3))
+            : dim,
       });
 
       gsap.to(wordEls, {
@@ -86,7 +85,7 @@ export const ScrollWordReveal: React.FC<ScrollWordRevealProps> = ({
         y: 0,
         scale: 1,
         color: (i: number, target: Element) =>
-          (target as HTMLElement).dataset.accent === 'true' ? accentColor : highlightColor,
+          (target as HTMLElement).dataset.accent === 'true' ? accent : highlight,
         ease: 'none',
         stagger: 0.05,
         scrollTrigger: {
@@ -97,7 +96,7 @@ export const ScrollWordReveal: React.FC<ScrollWordRevealProps> = ({
         },
       });
     },
-    { scope: containerRef, dependencies: [reduced, text] }
+    { scope: containerRef, dependencies: [reduced, text, accentColor, highlightColor, dimColor] }
   );
 
   return (

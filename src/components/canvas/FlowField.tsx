@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { hexToRgba, themeColor } from '@/lib/theme';
 
 interface Particle {
   x: number;
@@ -25,6 +26,10 @@ export default function FlowField() {
     if (!ctx) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const surface = themeColor('surface');
+    const accent = themeColor('accent');
+    const cream = themeColor('cream');
+    const trailFade = hexToRgba(surface, 0.045);
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
     let width = 0;
@@ -76,7 +81,7 @@ export default function FlowField() {
         return p;
       });
 
-      ctx.fillStyle = '#0B110E';
+      ctx.fillStyle = surface;
       ctx.fillRect(0, 0, width, height);
       if (reduced) renderStatic();
     };
@@ -119,7 +124,7 @@ export default function FlowField() {
     };
 
     const drawFrame = () => {
-      ctx.fillStyle = 'rgba(11, 17, 14, 0.045)';
+      ctx.fillStyle = trailFade;
       ctx.fillRect(0, 0, width, height);
 
       ctx.lineWidth = 1.15;
@@ -129,9 +134,9 @@ export default function FlowField() {
 
         const fadeEdge = Math.sin((p.life / p.maxLife) * Math.PI);
         if (p.hueMix === 0) {
-          ctx.strokeStyle = `rgba(52, 211, 153, ${0.34 + fadeEdge * 0.4})`;
+          ctx.strokeStyle = hexToRgba(accent, 0.34 + fadeEdge * 0.4);
         } else {
-          ctx.strokeStyle = `rgba(226, 232, 228, ${0.12 + fadeEdge * 0.2})`;
+          ctx.strokeStyle = hexToRgba(cream, 0.12 + fadeEdge * 0.2);
         }
         ctx.beginPath();
         ctx.moveTo(p.px, p.py);
@@ -212,7 +217,7 @@ export default function FlowField() {
   }, []);
 
   return (
-      <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-[#0B110E]">
+      <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-surface">
         <canvas ref={canvasRef} className="w-full h-full" aria-hidden="true" />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
       </div>

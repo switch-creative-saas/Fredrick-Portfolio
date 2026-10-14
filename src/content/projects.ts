@@ -49,7 +49,6 @@ export interface Project {
   process?: string;
   outcome?: string;
   stats: ProjectStat[];
-  accent: string;
   myRole?: string[];
   images: string[];
   hoverImage: string;
@@ -80,7 +79,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): how the React app, Supabase and Resend fit together.',
     implementation: 'TODO(fred): the parts that were hardest to build and how you solved them.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: [PLACEHOLDER_IMAGE], // TODO(fred): screenshots
     hoverImage: PLACEHOLDER_IMAGE,
@@ -104,7 +102,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     // TODO(fred): screenshots. Use demo data only, never real patient or beneficiary records.
     images: [PLACEHOLDER_IMAGE],
@@ -127,7 +124,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: ['/work/mountain-of-solution/cover.webp'],
     hoverImage: '/work/mountain-of-solution/cover.webp',
@@ -150,7 +146,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: ['/work/afrirecipes/cover.webp'],
     hoverImage: '/work/afrirecipes/cover.webp',
@@ -173,7 +168,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: ['/work/sparked/cover.webp'],
     hoverImage: '/work/sparked/cover.webp',
@@ -196,7 +190,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: ['/work/nova-secret/cover.webp'],
     hoverImage: '/work/nova-secret/cover.webp',
@@ -219,7 +212,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: ['/work/bright-prayer-hub/cover.webp'],
     hoverImage: '/work/bright-prayer-hub/cover.webp',
@@ -242,7 +234,6 @@ export const projects: Project[] = [
     architecture: 'TODO(fred): architecture and stack.',
     implementation: 'TODO(fred): implementation details.',
     stats: [],
-    accent: '#34D399',
     myRole: ['TODO(fred): list what you personally built.'],
     images: ['/work/benchmark-app/cover.webp'],
     hoverImage: '/work/benchmark-app/cover.webp',

@@ -171,7 +171,7 @@ const TechStack = () => {
                 >
                   {stack.title}
                 </h3>
-                <span className="font-mono text-xs text-warm tracking-widest uppercase block mt-2">
+                <span className="font-mono text-xs text-warm-light tracking-widest uppercase block mt-2">
                   {stack.technologies.length} Technologies
                 </span>
               </div>

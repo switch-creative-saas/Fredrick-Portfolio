@@ -145,7 +145,7 @@ export default function GlobalPreloader({ onComplete }: { onComplete?: () => voi
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#0B110E] cursor-wait text-cream select-none pointer-events-auto"
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-surface cursor-wait text-cream select-none pointer-events-auto"
       style={{ willChange: 'transform' }}
     >
       <div
@@ -168,7 +168,7 @@ export default function GlobalPreloader({ onComplete }: { onComplete?: () => voi
       <svg className="absolute top-0 -z-10 h-[calc(100%+300px)] w-full pointer-events-none">
         <path
           ref={curvePathRef}
-          className="fill-[#141516]"
+          className="fill-surface-mid"
           d={initialPath}
         />
       </svg>

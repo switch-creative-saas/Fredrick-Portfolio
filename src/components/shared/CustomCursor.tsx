@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from '@/lib/gsap';
 import { usePathname } from 'next/navigation';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { themeRgba } from '@/lib/theme';
 
 export default function CustomCursor() {
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -95,12 +96,12 @@ export default function CustomCursor() {
         setCursorText(type.toUpperCase());
         gsap.to(cursorOutline, {
           scale: type === 'drag' ? 4 : type === 'copy' ? 3 : 2,
-          backgroundColor: 'rgba(97,92,86,0.1)',
+          backgroundColor: themeRgba('warm', 0.1),
           duration: 0.4,
         });
         gsap.to(cursorTextEl, { opacity: 1, duration: 0.2 });
       } else {
-        gsap.to(cursorOutline, { scale: 2, backgroundColor: 'rgba(97,92,86,0.15)', duration: 0.4 });
+        gsap.to(cursorOutline, { scale: 2, backgroundColor: themeRgba('warm', 0.15), duration: 0.4 });
       }
 
       gsap.to(cursorDot, { scale: 0, duration: 0.3 });

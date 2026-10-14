@@ -18,7 +18,7 @@ export const metadata = pageMetadata({
 });
 
 const sectionPad = 'max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16';
-const label = 'font-mono text-sm sm:text-base text-warm uppercase tracking-[0.3em] font-medium';
+const label = 'font-mono text-sm sm:text-base text-warm-light uppercase tracking-[0.3em] font-medium';
 
 export default function AboutPage() {
   return (

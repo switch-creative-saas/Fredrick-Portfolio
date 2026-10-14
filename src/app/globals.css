@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 
+/* Font and size tokens are inlined because the font variables live on <body>, not :root. */
 @theme inline {
-  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-display: var(--font-syne), sans-serif;
   --font-sans: var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
   --font-serif: var(--font-instrument-serif), Georgia, serif;
@@ -14,35 +15,43 @@
 
   --spacing-section: clamp(6rem, 12vw, 11rem);
 
-  --color-cream: #E2E8E4;
-  --color-ink: #0A0F0D;
-  --color-accent: #34D399;
-  --color-accent-light: #6EE7B7;
-  --color-accent-muted: #10B981;
-  --color-warm: #45524B;
-  --color-warm-light: #94A39B;
-  --color-muted: #A3B3AA;
-  --color-light: #CAD4CE;
-  --color-elevated: #1A2420;
-  --color-elevated-dark: #121A16;
-  --color-surface: #0B110E;
-  --color-surface-base: #070A09;
-  --color-surface-card: #0F1613;
-  --color-surface-float: #141D19;
-  --color-surface-border: #1C2923;
-  --color-surface-mid: #111A16;
-  --color-border: #C8D2CC;
-  --color-border-dark: #BEC8C2;
-  --color-border-subtle: #24332B;
-  --color-border-subtler: #1A2620;
-  --color-charcoal: #131B17;
-  --color-gray-soft: #90A097;
-  --color-gray-mid: #44544C;
-  --color-gray-btn: #46574F;
-  --color-footer-bg: #D7E0DA;
-  --color-footer-border: #C5CFC9;
   --ease-in-expo: cubic-bezier(0.1, 0, 0.3, 1);
   --ease-custom: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/*
+ * Colour tokens. `static` emits every one on :root so canvas and GSAP code can read them
+ * (src/lib/theme.ts). Palette: deep indigo ink, royal blue accent, warm off-white cream.
+ * Keep src/lib/brand.ts in sync for OG images and icons.
+ */
+@theme static {
+  --color-cream: #F4F0E8;
+  --color-ink: #0B0E24;
+  --color-accent: #4F7BFF;
+  --color-accent-light: #93ABFF;
+  --color-accent-muted: #2C4FD8;
+  --color-warm: #4A4B63;
+  --color-warm-light: #9A9CB8;
+  --color-muted: #A9ABC6;
+  --color-light: #D6D7E6;
+  --color-elevated: #1B1F45;
+  --color-elevated-dark: #13163A;
+  --color-surface: #0E1230;
+  --color-surface-base: #070920;
+  --color-surface-card: #111538;
+  --color-surface-float: #161B44;
+  --color-surface-border: #222857;
+  --color-surface-mid: #12163A;
+  --color-border: #D9D2C3;
+  --color-border-dark: #CFC7B6;
+  --color-border-subtle: #262B58;
+  --color-border-subtler: #1C2049;
+  --color-charcoal: #12142B;
+  --color-gray-soft: #9496B3;
+  --color-gray-mid: #7C80A8;
+  --color-gray-btn: #5A5F8A;
+  --color-footer-bg: #E9E3D6;
+  --color-footer-border: #D9D2C3;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -91,15 +100,15 @@ body {
 }
 
 ::selection {
-  background: #34D399;
-  color: #0A0F0D;
+  background: var(--color-accent);
+  color: var(--color-ink);
 }
 
 .bg-primary {
-  background-color: #6EE7B7;
+  background-color: var(--color-accent-light);
 }
 .bg-foreground {
-  background-color: #1C2923;
+  background-color: var(--color-surface-border);
 }
 
 .film-grain {
@@ -139,20 +148,20 @@ body {
 
 .marquee-row-light::before {
   left: 0;
-  background: linear-gradient(to right, #E2E8E4, transparent);
+  background: linear-gradient(to right, var(--color-cream), transparent);
 }
 .marquee-row-light::after {
   right: 0;
-  background: linear-gradient(to left, #E2E8E4, transparent);
+  background: linear-gradient(to left, var(--color-cream), transparent);
 }
 
 .marquee-row-dark::before {
   left: 0;
-  background: linear-gradient(to right, #0A0F0D, transparent);
+  background: linear-gradient(to right, var(--color-ink), transparent);
 }
 .marquee-row-dark::after {
   right: 0;
-  background: linear-gradient(to left, #0A0F0D, transparent);
+  background: linear-gradient(to left, var(--color-ink), transparent);
 }
 
 .marquee-content-left {
@@ -221,7 +230,7 @@ body.cursor-disabled * {
 }
 
 :focus-visible {
-  outline: 2px solid #34D399;
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -232,8 +241,8 @@ body.cursor-disabled * {
   left: 1rem;
   z-index: 10002;
   padding: 0.75rem 1.25rem;
-  background: #0A0F0D;
-  color: #E2E8E4;
+  background: var(--color-ink);
+  color: var(--color-cream);
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.12em;

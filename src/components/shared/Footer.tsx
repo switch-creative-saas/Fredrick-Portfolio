@@ -6,7 +6,7 @@ import Magnetic from '@/components/ui/Magnetic';
 import { FaArrowUp } from 'react-icons/fa';
 import { useHandleLinkClick } from '@/lib/navigation';
 import { useLenis } from '@/components/providers/SmoothScrollProvider';
-import { site, socialList, navLinks } from '@/content/site';
+import { site, socialList, navLinks, footer } from '@/content/site';
 import Lenis from 'lenis';
 
 const Footer = () => {
@@ -110,7 +110,32 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex flex-col-reverse sm:flex-row sm:items-end justify-between gap-6 pt-8 border-t border-border-subtle">
+          <div className="space-y-2 font-sans text-xs sm:text-sm text-gray-soft">
+            <p>
+              © {new Date().getFullYear()} {site.name}
+            </p>
+            <ul className="flex flex-wrap gap-x-4 gap-y-1">
+              {footer.legalLinks.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="hover:text-accent transition-colors duration-300">
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p>
+              {footer.credit.text}{' '}
+              <a
+                href={footer.credit.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-accent transition-colors duration-300"
+              >
+                {footer.credit.author}
+              </a>
+            </p>
+          </div>
           <Magnetic strength={0.4}>
             <button
               onClick={scrollToTop}

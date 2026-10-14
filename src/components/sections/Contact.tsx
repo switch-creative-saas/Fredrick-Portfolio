@@ -212,7 +212,7 @@ const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactP
                 autoComplete="name"
                 aria-invalid={!!errors.name}
                 aria-describedby={errors.name ? 'name-error' : undefined}
-                className={`w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream placeholder-[#6a6a68] focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30 ${
+                className={`w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream placeholder-gray-mid focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30 ${
                   errors.name ? 'border-red-500 focus:border-red-500' : ''
                 }`}
                 disabled={isDisabled}
@@ -234,7 +234,7 @@ const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactP
                 placeholder="you@example.com"
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'email-error' : undefined}
-                className={`w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream placeholder-[#6a6a68] focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30 ${
+                className={`w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream placeholder-gray-mid focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30 ${
                   errors.email ? 'border-red-500 focus:border-red-500' : ''
                 }`}
                 disabled={isDisabled}
@@ -288,7 +288,7 @@ const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactP
                 placeholder="Write your message here..."
                 aria-invalid={!!errors.message}
                 aria-describedby={errors.message ? 'message-error' : undefined}
-                className={`w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream placeholder-[#6a6a68] resize-none focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30 ${
+                className={`w-full px-4 py-3 text-sm sm:text-base border rounded-xl bg-surface text-cream placeholder-gray-mid resize-none focus:outline-none transition-all duration-300 border-white/[0.08] focus:border-accent focus:ring-1 focus:ring-accent/30 ${
                   errors.message ? 'border-red-500 focus:border-red-500' : ''
                 }`}
                 disabled={isDisabled}
@@ -336,7 +336,7 @@ const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactP
 
           <div className="mt-16 pt-12 border-t border-elevated-dark flex flex-col items-center justify-center text-center w-full">
             <div className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center text-center">
-              <p className="text-xs uppercase tracking-widest text-warm mb-3 font-mono text-center">
+              <p className="text-xs uppercase tracking-widest text-warm-light mb-3 font-mono text-center">
                 Direct Contact
               </p>
 
@@ -358,7 +358,7 @@ const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactP
                 </button>
               </div>
 
-              <span className="font-mono text-[11px] text-warm/70 uppercase tracking-widest mt-2 block text-center">
+              <span className="font-mono text-[11px] text-warm-light uppercase tracking-widest mt-2 block text-center">
                 Click to copy email address
               </span>
             </div>
@@ -373,8 +373,8 @@ const Contact = ({ initialTopic = DEFAULT_TOPIC, headingLevel = 'h2' }: ContactP
           copiedToast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
         }`}
         style={{
-          background: '#34D399',
-          color: '#0A0F0D',
+          background: 'var(--color-accent)',
+          color: 'var(--color-ink)',
           fontFamily: 'monospace',
           fontSize: '0.75rem',
           letterSpacing: '0.1em',

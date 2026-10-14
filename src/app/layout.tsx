@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Space_Grotesk, Instrument_Serif } from 'next/font/google';
+import { Geist, Geist_Mono, Syne, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 import ClientLayout from './ClientLayout';
 import { siteMetadata } from '@/lib/metadata';
@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
   preload: true,
   display: 'swap',
 });
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space-grotesk',
+const syne = Syne({
+  variable: '--font-syne',
   subsets: ['latin'],
   preload: true,
   display: 'swap',
@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={personJsonLd()} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable} antialiased bg-cream`}
+        className={`${geistSans.variable} ${geistMono.variable} ${syne.variable} ${instrumentSerif.variable} antialiased bg-cream`}
       >
         <a href="#main-content" className="skip-link">
           Skip to content

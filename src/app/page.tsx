@@ -24,7 +24,7 @@ export default function Home() {
         banner={<HomeBanner />}
         about={<About />}
       >
-        <CurvedSectionDivider curveColor="#0A0F0D" bottomColor="#E2E8E4" />
+        <CurvedSectionDivider curveColor="var(--color-ink)" bottomColor="var(--color-cream)" />
         <section className="relative z-20 bg-cream">
           <Paths />
           <Projects items={featuredItems} heading={featured.heading} />
@@ -40,7 +40,7 @@ export default function Home() {
           <RecognitionStrip />
         </section>
         <MarqueeStrip />
-        <CurvedSectionDivider curveColor="#E2E8E4" bottomColor="#0A0F0D" />
+        <CurvedSectionDivider curveColor="var(--color-cream)" bottomColor="var(--color-ink)" />
         <div className="relative z-25 bg-ink overflow-hidden">
           <ContactCta />
           <Footer />

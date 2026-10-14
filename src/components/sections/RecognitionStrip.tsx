@@ -45,7 +45,7 @@ export default function RecognitionStrip() {
           {entries.map((e) => (
             <li key={e.key} className="recognition-item">
               <p className="font-display text-xl md:text-2xl font-bold uppercase tracking-tight leading-tight text-charcoal">{e.title}</p>
-              {e.meta && <p className="mt-2 font-mono text-xs uppercase tracking-widest text-gray-soft">{e.meta}</p>}
+              {e.meta && <p className="mt-2 font-mono text-xs uppercase tracking-widest text-warm">{e.meta}</p>}
               {e.detail && <p className="mt-2 font-sans text-sm leading-relaxed text-warm">{e.detail}</p>}
             </li>
           ))}

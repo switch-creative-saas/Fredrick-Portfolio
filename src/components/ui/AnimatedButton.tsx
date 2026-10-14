@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, ElementType } from 'react';
 import { gsap } from '@/lib/gsap';
+import { themeColor, themeRgba } from '@/lib/theme';
 
 interface AnimatedButtonProps {
   onClick?: (e: React.MouseEvent<any>) => void;
@@ -30,40 +31,39 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 
   const Component = as;
 
-  let bgColor, textColor, borderColor, rippleColor, hoverBgColor, originalBgColor;
+  // Colours resolve from theme tokens at hover time (GSAP needs concrete values to tween).
+  let bgColor: string, textColor: string, borderColor: string;
+  let hoverBgColor: () => string, originalBgColor: () => string;
   switch (variant) {
     case 'light':
       bgColor = 'bg-transparent';
-      textColor = 'text-[#141516]';
-      borderColor = 'border-2 border-[#141516]';
-      rippleColor = 'rgba(20, 21, 22, 0.1)';
-      hoverBgColor = 'rgba(20, 21, 22, 0.06)';
-      originalBgColor = 'transparent';
+      textColor = 'text-charcoal';
+      borderColor = 'border-2 border-charcoal';
+      hoverBgColor = () => themeRgba('charcoal', 0.06);
+      originalBgColor = () => 'transparent';
       break;
     case 'primary':
       bgColor = 'bg-accent';
-      textColor = 'text-white';
+      // Ink, not white: white on the royal blue accent fails WCAG AA at button sizes.
+      textColor = 'text-ink';
       borderColor = 'border border-accent';
-      rippleColor = 'rgba(255, 255, 255, 0.25)';
-      hoverBgColor = '#059669';
-      originalBgColor = '#34D399';
+      hoverBgColor = () => themeColor('accent-light');
+      originalBgColor = () => themeColor('accent');
       break;
     case 'outline':
       bgColor = 'bg-transparent';
-      textColor = 'text-[#45524B]';
-      borderColor = 'border border-[#111A16]/25';
-      rippleColor = 'rgba(17, 26, 22, 0.08)';
-      hoverBgColor = 'rgba(17, 26, 22, 0.04)';
-      originalBgColor = 'transparent';
+      textColor = 'text-warm';
+      borderColor = 'border border-charcoal/25';
+      hoverBgColor = () => themeRgba('charcoal', 0.04);
+      originalBgColor = () => 'transparent';
       break;
     case 'dark':
     default:
-      bgColor = 'bg-[#111A16]';
+      bgColor = 'bg-surface-mid';
       textColor = 'text-cream';
-      borderColor = 'border border-[#111A16]';
-      rippleColor = 'rgba(255, 255, 255, 0.15)';
-      hoverBgColor = '#1A2420';
-      originalBgColor = '#111A16';
+      borderColor = 'border border-surface-mid';
+      hoverBgColor = () => themeColor('elevated');
+      originalBgColor = () => themeColor('surface-mid');
       break;
   }
 
@@ -87,7 +87,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 
     gsap.set(ripple, { left: x, top: y, scale: 0, opacity: 1 });
     gsap.to(ripple, { scale: finalScale, opacity: 0.6, duration: 0.6, ease: 'power2.out' });
-    gsap.to(button, { backgroundColor: hoverBgColor, duration: 0.4, ease: 'power2.out' });
+    gsap.to(button, { backgroundColor: hoverBgColor(), duration: 0.4, ease: 'power2.out' });
   };
 
   const handleButtonMouseLeave = () => {
@@ -95,7 +95,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     const ripple = rippleRef.current;
     if (!button || !ripple) return;
     gsap.to(ripple, { scale: 0, opacity: 0, duration: 0.5, ease: 'power2.out' });
-    gsap.to(button, { backgroundColor: originalBgColor, duration: 0.4, ease: 'power2.out' });
+    gsap.to(button, { backgroundColor: originalBgColor(), duration: 0.4, ease: 'power2.out' });
   };
 
   useEffect(() => {
@@ -140,7 +140,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         <span
           ref={rippleRef}
           className="absolute pointer-events-none rounded-full w-[100px] h-[100px] -translate-x-1/2 -translate-y-1/2"
-          style={{ backgroundColor: rippleColor, opacity: 0 }}
+          style={{ backgroundColor: variant === 'primary' || variant === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'color-mix(in srgb, var(--color-charcoal) 10%, transparent)', opacity: 0 }}
         />
 
         <span className="flex items-center justify-center h-full transition-transform duration-300 ease-in-out group-hover:-translate-y-full relative z-10">

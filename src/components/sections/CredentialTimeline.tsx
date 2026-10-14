@@ -159,7 +159,7 @@ export default function CredentialTimeline({
   return (
     <div ref={tableRef} className={className}>
       <div className="mb-12 text-center md:mb-20">
-        <span className={`cred-section-label font-mono text-sm sm:text-base md:text-base text-warm uppercase tracking-[0.3em] font-medium inline-block ${hidden}`}>
+        <span className={`cred-section-label font-mono text-sm sm:text-base md:text-base text-warm-light uppercase tracking-[0.3em] font-medium inline-block ${hidden}`}>
           {label}
         </span>
         <h3 className="mt-5 font-display text-[clamp(2.5rem,7vw,6.5rem)] font-black uppercase tracking-tight leading-none text-light">
@@ -181,7 +181,7 @@ export default function CredentialTimeline({
             ref={pathRef}
             d="M32 0 C25 84 39 164 32 250 C25 334 39 416 32 500 C25 584 39 666 32 750 C25 834 39 916 32 1000"
             fill="none"
-            stroke="rgba(232, 228, 222, 0.28)"
+            style={{ stroke: 'color-mix(in srgb, var(--color-cream) 28%, transparent)' }}
             strokeWidth="1.5"
           />
         </svg>

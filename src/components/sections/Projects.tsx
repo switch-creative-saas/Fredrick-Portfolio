@@ -9,6 +9,7 @@ import AnimatedHeading, { type HeadingWord } from '@/components/ui/AnimateHeadin
 import { getAllProjects, Project, type ProjectTag } from '@/content/projects';
 import { projectsSection } from '@/content/home';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { themeRgba } from '@/lib/theme';
 
 export const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | null>) => {
   const floatingRef = useRef<HTMLDivElement | null>(null);
@@ -315,7 +316,7 @@ function MobileSnapProjects({ projects, router, hrefFor, heading, filterRow }: M
             onTouchStart={() => router.prefetch(hrefFor(project))}
             ref={(el) => { cardRefs.current[index] = el; }}
             className="overflow-hidden rounded-3xl block no-underline text-inherit"
-            style={{ background: '#111110', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+            style={{ background: 'var(--color-surface-mid)', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <div className="p-3 pb-0">
               <div
@@ -343,7 +344,7 @@ function MobileSnapProjects({ projects, router, hrefFor, heading, filterRow }: M
                   className="mc-num font-mono font-black leading-none"
                   style={{
                     fontSize: 'clamp(2rem, 9vw, 2.6rem)',
-                    color: '#34D399',
+                    color: 'var(--color-accent)',
                     letterSpacing: '-0.03em',
                   }}
                 >
@@ -385,8 +386,8 @@ function MobileSnapProjects({ projects, router, hrefFor, heading, filterRow }: M
                     {projectsSection.viewLabel}
                   </span>
                   <span
-                    className="flex items-center justify-center w-9 h-9 rounded-full text-[#0A0F0D] text-sm"
-                    style={{ background: '#34D399', boxShadow: '0 0 16px rgba(52, 211, 153, 0.35)' }}
+                    className="flex items-center justify-center w-9 h-9 rounded-full text-ink text-sm"
+                    style={{ background: 'var(--color-accent)', boxShadow: '0 0 16px color-mix(in srgb, var(--color-accent) 35%, transparent)' }}
                   >
                     →
                   </span>
@@ -605,7 +606,7 @@ export default function ProjectsPage({
     const row = e.currentTarget;
     const line = row.querySelector('.hover-line-ref');
     if (line) gsap.to(line, { width: '100%', duration: 0.15, ease: 'power2.out' });
-    gsap.to(row, { backgroundColor: 'rgba(196, 93, 62, 0.04)', duration: 0.15, ease: 'power2.out' });
+    gsap.to(row, { backgroundColor: themeRgba('accent', 0.04), duration: 0.15, ease: 'power2.out' });
   };
 
   const filterRow = filters && filters.length > 1 ? (
@@ -662,11 +663,11 @@ export default function ProjectsPage({
               data-cursor="view"
               onClick={handleRowClick}
             >
-              <div className="flex-[0_0_80px] font-mono text-[13px] text-gray-soft pt-2 relative h-6 overflow-hidden">
+              <div className="flex-[0_0_80px] font-mono text-[13px] text-warm pt-2 relative h-6 overflow-hidden">
                 <span className="block absolute transition-all duration-300 ease-out group-hover:-translate-y-full group-hover:opacity-0">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <span className="block absolute translate-y-full opacity-0 text-accent transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                <span className="block absolute translate-y-full opacity-0 text-accent-muted transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
                   →
                 </span>
               </div>
@@ -695,7 +696,7 @@ export default function ProjectsPage({
               </div>
 
               <div className="flex-[0_0_200px] text-right flex flex-col justify-end items-end pb-2">
-                <span className="font-mono text-xs uppercase tracking-widest text-charcoal group-hover:text-accent transition-colors duration-250 flex items-center gap-1">
+                <span className="font-mono text-xs uppercase tracking-widest text-charcoal group-hover:text-accent-muted transition-colors duration-250 flex items-center gap-1">
                   <span>{projectsSection.viewLabel}</span>
                   <span className="inline-block transition-transform duration-200 group-hover:translate-x-1.5">
                     →

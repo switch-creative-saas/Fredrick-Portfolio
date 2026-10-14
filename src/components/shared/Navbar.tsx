@@ -12,7 +12,10 @@ import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 import { Copyright } from 'lucide-react';
 import Magnetic from '@/components/ui/Magnetic';
-import { isActiveRoute } from '@/lib/routes';
+import { isActiveRoute, normalizePath } from '@/lib/routes';
+
+/** Routes whose top section is cream; every other page starts on ink. */
+const LIGHT_TOP_ROUTES = ['/', '/work'];
 
 /** Below this width the top bar has no room for every link, so the hamburger stays visible. */
 const isCompactViewport = () => window.innerWidth < 1024;
@@ -90,7 +93,7 @@ const MagneticHamburgerButton: React.FC<MagneticHamburgerButtonProps> = ({ isOpe
         onClick={onClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleButtonMouseLeave}
-        className="relative w-12 h-12 md:w-15 md:h-15 rounded-full overflow-hidden bg-[#111A16] border border-white/15 outline-none flex items-center justify-center cursor-pointer shadow-xl group"
+        className="relative w-12 h-12 md:w-15 md:h-15 rounded-full overflow-hidden bg-surface-mid border border-white/15 outline-none flex items-center justify-center cursor-pointer shadow-xl group"
         style={{ transformOrigin: 'center' }}
         aria-label="Toggle menu"
         aria-expanded={isOpen}
@@ -104,13 +107,13 @@ const MagneticHamburgerButton: React.FC<MagneticHamburgerButtonProps> = ({ isOpe
 
         <div className="relative z-10 w-5 h-3 flex items-center justify-center pointer-events-none">
           <span
-            className={`absolute w-full h-[2px] rounded-full bg-[#E2E8E4] transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+            className={`absolute w-full h-[2px] rounded-full bg-cream transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] ${
               isOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0 rotate-0'
             }`}
             style={{ transformOrigin: 'center' }}
           />
           <span
-            className={`absolute w-full h-[2px] rounded-full bg-[#E2E8E4] transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+            className={`absolute w-full h-[2px] rounded-full bg-cream transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] ${
               isOpen ? 'bottom-1/2 translate-y-1/2 -rotate-45' : 'bottom-0 rotate-0'
             }`}
             style={{ transformOrigin: 'center' }}
@@ -124,9 +127,11 @@ const MagneticHamburgerButton: React.FC<MagneticHamburgerButtonProps> = ({ isOpe
 interface NavbarBrandProps {
   logoRef?: React.RefObject<any>;
   handleLinkClick: (href: string) => void;
+  /** Text colour class for the current page background. */
+  tone: string;
 }
 
-const NavbarBrand: React.FC<NavbarBrandProps> = ({ logoRef, handleLinkClick }) => {
+const NavbarBrand: React.FC<NavbarBrandProps> = ({ logoRef, handleLinkClick, tone }) => {
   return (
     <Magnetic strength={0.3}>
       <Link
@@ -137,13 +142,13 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({ logoRef, handleLinkClick }) =
           e.preventDefault();
           handleLinkClick('/');
         }}
-        className="group flex items-center cursor-pointer select-none py-1 text-warm"
+        className={`group flex items-center cursor-pointer select-none py-1 ${tone}`}
         aria-label={`${site.name} home`}
       >
         <div className="transition-transform duration-500 ease-in-expo group-hover:rotate-[360deg] flex items-center justify-center">
           <Copyright className="w-[18px] h-[18px]" />
         </div>
-        <div className="relative ms-2 flex items-center whitespace-nowrap text-warm text-lg font-sans tracking-wide font-medium leading-none">
+        <div className={`relative ms-2 flex items-center whitespace-nowrap ${tone} text-lg font-sans tracking-wide font-medium leading-none`}>
           <span>{site.logo.lead}</span>
           <span className="relative inline-flex items-center overflow-hidden transition-all duration-500 ease-in-expo w-[24px] group-hover:w-[76px]">
             <span className="ps-1.5 transition-transform duration-500 ease-in-expo group-hover:-translate-x-full inline-block">
@@ -400,7 +405,7 @@ const FullscreenMenu: React.FC<FullscreenMenuProps> = ({ isOpen, onClose, handle
           <path
             ref={curvePathRef}
             d="M100 0 L200 0 L200 100 L100 100 Q100 50 100 0"
-            fill="#0B110E"
+            fill="var(--color-surface)"
           />
         </svg>
 
@@ -676,6 +681,8 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
 
   const links = navLinks;
   const pathname = usePathname() || '/';
+  // The bar floats over the page, so its text follows the background at the top of each route.
+  const tone = LIGHT_TOP_ROUTES.includes(normalizePath(pathname)) ? 'text-warm' : 'text-light';
 
   const navStyle: React.CSSProperties = {
     opacity: isTransitioning ? 0 : 1,
@@ -692,10 +699,10 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
           style={navStyle}
         >
           <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16 flex justify-between items-center">
-            <NavbarBrand logoRef={logoRef} handleLinkClick={handleLinkClick} />
+            <NavbarBrand logoRef={logoRef} handleLinkClick={handleLinkClick} tone={tone} />
             <ul
               ref={linksContainerRef}
-              className="hidden lg:flex gap-6 text-warm text-base font-sans font-medium uppercase tracking-wider"
+              className={`hidden lg:flex gap-6 ${tone} text-base font-sans font-medium uppercase tracking-wider`}
             >
               {links.filter((l) => !l.menuOnly).map((link) => {
                 const active = isActiveRoute(link.href, pathname);
@@ -727,7 +734,7 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
           style={navStyle}
         >
           <div className="flex justify-between items-center px-6 sm:px-8 h-20 w-full">
-            <NavbarBrand handleLinkClick={handleLinkClick} />
+            <NavbarBrand handleLinkClick={handleLinkClick} tone={tone} />
             <div className="w-10 h-10" />
           </div>
         </nav>

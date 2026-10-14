@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { themeRgba } from '@/lib/theme';
 
 interface NodeItem {
   x: number;
@@ -29,6 +30,8 @@ export default function AmbientGeometry() {
     if (!ctx) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const nodeFill = themeRgba('accent', 0.18);
+    const lineStroke = themeRgba('accent', 0.08);
 
     let width = 0;
     let height = 0;
@@ -57,7 +60,7 @@ export default function AmbientGeometry() {
       const mouse = mouseRef.current;
 
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(52, 211, 153, 0.18)';
+      ctx.fillStyle = nodeFill;
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
         if (updatePhysics) {
@@ -115,7 +118,7 @@ export default function AmbientGeometry() {
       ctx.fill();
 
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(52, 211, 153, 0.08)';
+      ctx.strokeStyle = lineStroke;
       ctx.lineWidth = 0.5;
 
       for (let i = 0; i < nodes.length; i++) {

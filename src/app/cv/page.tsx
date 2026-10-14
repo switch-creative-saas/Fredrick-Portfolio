@@ -41,15 +41,15 @@ export default function CvPage() {
         <AnimatedButton as="a" href={site.cvPath} download="Fredrick-Akojuru-CV.pdf" topText={cvPage.download.top} bottomText={cvPage.download.bottom} variant="primary" />
 
         <section className="mt-16">
-          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm mb-2">{sections.education}</h2>
+          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm-light mb-2">{sections.education}</h2>
           <ul className="border-t border-border-subtle">{getTimeline('education').map(timelineEntry)}</ul>
         </section>
         <section className="mt-12">
-          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm mb-2">{sections.experience}</h2>
+          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm-light mb-2">{sections.experience}</h2>
           <ul className="border-t border-border-subtle">{[...getTimeline('experience'), ...getTimeline('venture')].map(timelineEntry)}</ul>
         </section>
         <section className="mt-12">
-          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm mb-2">{sections.research}</h2>
+          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm-light mb-2">{sections.research}</h2>
           <ul className="border-t border-border-subtle">
             {research.map((r) => (
               <Entry
@@ -62,7 +62,7 @@ export default function CvPage() {
           </ul>
         </section>
         <section className="mt-12">
-          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm mb-2">{sections.awards}</h2>
+          <h2 className="font-mono text-sm uppercase tracking-[0.3em] text-warm-light mb-2">{sections.awards}</h2>
           <ul className="border-t border-border-subtle">
             {awards.map((a) => (
               <Entry key={a.id} title={`${a.title}, ${a.event}`} meta={String(a.year)} detail={[a.organizer, a.detail].filter(Boolean).join('. ')} />
