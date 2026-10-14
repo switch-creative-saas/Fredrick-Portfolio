@@ -24,6 +24,7 @@ export const site = {
   location: 'Abuja, Nigeria',
   timeZone: 'Africa/Lagos',
   timeZoneLabel: 'WAT',
+  twitterHandle: '@clearskiies11',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://fredrickakojuru.vercel.app',
   tagline: 'Public health student building VitaLink, healthcare infrastructure for Africa.',
   roles: ['Founder, VitaLink', 'Public Health, Miva', 'Developer', 'Designer', 'Photographer'],

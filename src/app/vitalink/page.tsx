@@ -9,6 +9,7 @@ export const metadata = pageMetadata({
   title: 'VitaLink',
   description: vitalink.intro,
   path: '/vitalink',
+  ownOgImage: true,
 });
 
 const sectionPad = 'max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16';

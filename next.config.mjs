@@ -7,6 +7,13 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  // Old URLs that are indexed on Google.
+  async redirects() {
+    return [
+      { source: '/rss.xml', destination: '/', permanent: true },
+      { source: '/projects/:slug', destination: '/work/:slug', permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

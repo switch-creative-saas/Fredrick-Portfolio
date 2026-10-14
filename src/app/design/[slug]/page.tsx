@@ -3,6 +3,8 @@ import PageShell from '@/components/shared/PageShell';
 import { getDesignBySlug, getAllDesigns } from '@/content/designs';
 import { projectMetadata } from '@/lib/metadata';
 import { notFound } from 'next/navigation';
+import JsonLd from '@/components/shared/JsonLd';
+import { creativeWorkJsonLd } from '@/lib/jsonld';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -23,6 +25,7 @@ export default async function DesignProjectPage({ params }: PageProps) {
   if (!design) notFound();
   return (
     <PageShell className="bg-surface-base">
+      <JsonLd data={creativeWorkJsonLd(design, `/design/${design.slug}`)} />
       <ProjectDetails key={design.slug} project={design} collection="design" />
     </PageShell>
   );

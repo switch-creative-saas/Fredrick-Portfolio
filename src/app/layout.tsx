@@ -4,6 +4,8 @@ import ClientLayout from './ClientLayout';
 import { siteMetadata } from '@/lib/metadata';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import JsonLd from '@/components/shared/JsonLd';
+import { personJsonLd } from '@/lib/jsonld';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +37,9 @@ export const metadata = siteMetadata;
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <JsonLd data={personJsonLd()} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable} antialiased bg-cream`}
       >

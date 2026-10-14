@@ -7,8 +7,19 @@
 export const INDEX_ROUTES = ['/', '/work', '/design', '/photography'] as const;
 export const DETAIL_PREFIXES = ['/work/', '/design/'] as const;
 
-/** Top-level pages, used by the sitemap. */
-export const PAGE_ROUTES = ['/', '/about', '/vitalink', '/work', '/design', '/photography', '/contact'] as const;
+/** Every static page, used by the sitemap. */
+export const SITEMAP_ROUTES: string[] = [
+  '/',
+  '/about',
+  '/vitalink',
+  '/work',
+  '/design',
+  '/photography',
+  '/contact',
+  '/cv',
+  '/privacy-policy',
+  '/terms-of-service',
+];
 
 export type IndexRoute = (typeof INDEX_ROUTES)[number];
 
