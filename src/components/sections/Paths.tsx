@@ -6,6 +6,9 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import AnimatedHeading from '@/components/ui/AnimateHeading';
 import { useHoverPreview } from '@/components/sections/Projects';
 import { paths } from '@/content/home';
+import { isPromoted } from '@/content/site';
+
+const cards = paths.cards.filter((card) => isPromoted(card.href));
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
 /** Four large cards pointing at the main areas of the site, with the Projects hover preview. */
@@ -58,7 +61,7 @@ export default function Paths() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" onMouseLeave={hide}>
-          {paths.cards.map((card, index) => (
+          {cards.map((card, index) => (
             <a
               key={card.href}
               href={card.href}
@@ -112,7 +115,7 @@ export default function Paths() {
             style={{ willChange: 'transform', transform: 'scale(1.12)' }}
           >
             <div ref={sliderReelRef} className="w-full h-full relative" style={{ willChange: 'transform' }}>
-              {paths.cards.map((card, idx) => (
+              {cards.map((card, idx) => (
                 <div key={card.href} className="w-full h-full absolute inset-0 overflow-hidden" style={{ top: `${idx * 100}%` }}>
                   <Image src={card.image} alt="" fill sizes="420px" className="object-cover object-top" />
                 </div>

@@ -1,3 +1,6 @@
+import { designs } from './designs';
+import { realPhotos } from './photography';
+
 export interface SocialLink {
   label: string;
   href: string;
@@ -41,6 +44,18 @@ export const socials: Record<SocialKey, SocialLink> = {
 
 export const socialList: SocialLink[] = [socials.linkedin, socials.github, socials.x, socials.instagram];
 
+/** A portfolio section is promoted (navbar, home, sitemap) only once it has this many real items. */
+export const MIN_PORTFOLIO_ITEMS = 6;
+export const showDesign = designs.length >= MIN_PORTFOLIO_ITEMS;
+export const showPhotography = realPhotos.length >= MIN_PORTFOLIO_ITEMS;
+
+/** False for routes that exist but should not be promoted yet. */
+export function isPromoted(href: string): boolean {
+  if (href === '/design') return showDesign;
+  if (href === '/photography') return showPhotography;
+  return true;
+}
+
 export const navLinks: NavLink[] = [
   { name: 'Home', href: '/', menuOnly: true },
   { name: 'About', href: '/about' },
@@ -49,4 +64,4 @@ export const navLinks: NavLink[] = [
   { name: 'Design', href: '/design' },
   { name: 'Photography', href: '/photography' },
   { name: 'Contact', href: '/contact' },
-];
+].filter((link) => isPromoted(link.href));

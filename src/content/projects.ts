@@ -1,6 +1,27 @@
 export type ProjectCategory = 'dev' | 'design';
 export type ProjectStatus = 'live' | 'in-progress' | 'archived';
 
+export type ProjectTag = 'health' | 'web-app' | 'client-site';
+
+/** Filter row on /work. Each id other than 'all' matches a ProjectTag. */
+export const WORK_FILTERS: { id: 'all' | ProjectTag; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'health', label: 'Health' },
+  { id: 'web-app', label: 'Web apps' },
+  { id: 'client-site', label: 'Client sites' },
+];
+
+/** Labels used on the project detail page. */
+export const detailCopy = {
+  privateCodebase: 'Private codebase',
+  keyMovesHeading: [{ t: 'KEY' }, { t: 'moves', serif: true }],
+  builtWithLabel: 'Built with',
+  toolsLabel: 'Tools',
+};
+
+/** Optional long-form text sections. Dev projects use overview/architecture/implementation, design uses overview/process/outcome. */
+export type ProjectTextSection = 'overview' | 'architecture' | 'implementation' | 'process' | 'outcome';
+
 export interface ProjectStat {
   value: string;
   label: string;
@@ -17,16 +38,19 @@ export interface Project {
   status: ProjectStatus | null;
   client?: string;
   featured: boolean;
+  tags: ProjectTag[];
   type: string;
   role: string;
   tech: string[];
   description: string;
-  overview: string;
-  architecture: string;
-  implementation: string;
+  overview?: string;
+  architecture?: string;
+  implementation?: string;
+  process?: string;
+  outcome?: string;
   stats: ProjectStat[];
   accent: string;
-  myRole: string[];
+  myRole?: string[];
   images: string[];
   hoverImage: string;
   /** Omit for private repositories. */
@@ -45,6 +69,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: null, // TODO(fred): status
     featured: true,
+    tags: ['web-app'], // TODO(fred): confirm tags
     type: 'Convention management portal',
     role: 'TODO(fred): your role on this project',
     tech: ['React', 'Supabase', 'Vercel', 'Resend'],
@@ -69,6 +94,7 @@ export const projects: Project[] = [
     status: null, // TODO(fred): status
     client: 'The Leprosy Mission Nigeria',
     featured: true,
+    tags: ['health', 'web-app'], // TODO(fred): confirm tags
     type: 'NGO operations management platform',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -92,6 +118,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: 'live',
     featured: true,
+    tags: ['client-site'], // TODO(fred): confirm tags
     type: 'Church website',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -114,6 +141,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: 'live',
     featured: false,
+    tags: ['web-app'], // TODO(fred): confirm tags
     type: 'TODO(fred): project type',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -136,6 +164,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: 'live',
     featured: false,
+    tags: ['web-app'], // TODO(fred): confirm tags
     type: 'TODO(fred): project type',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -158,6 +187,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: 'live',
     featured: false,
+    tags: ['web-app'], // TODO(fred): confirm tags
     type: 'TODO(fred): project type',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -180,6 +210,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: 'live',
     featured: false,
+    tags: ['web-app'], // TODO(fred): confirm tags
     type: 'TODO(fred): project type',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -202,6 +233,7 @@ export const projects: Project[] = [
     year: null, // TODO(fred): year
     status: null, // TODO(fred): status
     featured: false,
+    tags: ['web-app'], // TODO(fred): confirm tags
     type: 'TODO(fred): project type',
     role: 'TODO(fred): your role on this project',
     tech: [], // TODO(fred): stack
@@ -218,8 +250,21 @@ export const projects: Project[] = [
   },
 ];
 
+/** Featured first, then newest first. Items without a year sort last. */
+export function sortProjects(items: Project[]): Project[] {
+  return [...items].sort((a, b) => {
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    return (b.year ?? -Infinity) - (a.year ?? -Infinity);
+  });
+}
+
 export function getAllProjects(): Project[] {
   return projects;
+}
+
+/** Dev projects in display order for /work. */
+export function getWorkProjects(): Project[] {
+  return sortProjects(projects.filter((p) => p.category === 'dev'));
 }
 
 export function getProjectBySlug(slug: string): Project | undefined {

@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Link } from 'next-transition-router';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useRouter } from 'next/navigation';
 import AnimatedHeading, { type HeadingWord } from '@/components/ui/AnimateHeading';
-import { getAllProjects, Project } from '@/content/projects';
+import { getAllProjects, Project, type ProjectTag } from '@/content/projects';
 import { projectsSection } from '@/content/home';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
@@ -233,9 +233,10 @@ interface MobileSnapProjectsProps {
   router: ReturnType<typeof useRouter>;
   hrefFor: (project: Project) => string;
   heading: HeadingWord[];
+  filterRow?: React.ReactNode;
 }
 
-function MobileSnapProjects({ projects, router, hrefFor, heading }: MobileSnapProjectsProps) {
+function MobileSnapProjects({ projects, router, hrefFor, heading, filterRow }: MobileSnapProjectsProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -303,6 +304,7 @@ function MobileSnapProjects({ projects, router, hrefFor, heading }: MobileSnapPr
           words={heading}
           className="text-[clamp(3rem,14vw,5rem)] leading-none text-charcoal"
         />
+        {filterRow}
       </div>
 
       <div className="flex flex-col gap-4 px-4">
@@ -406,6 +408,8 @@ interface ProjectsProps {
   heading?: HeadingWord[];
   /** Section id, used for in-page anchors. */
   id?: string;
+  /** Optional filter row. Each id other than 'all' matches a project tag. */
+  filters?: { id: 'all' | ProjectTag; label: string }[];
 }
 
 export default function ProjectsPage({
@@ -413,9 +417,15 @@ export default function ProjectsPage({
   basePath,
   heading = projectsSection.heading,
   id = 'projects',
+  filters,
 }: ProjectsProps) {
   const router = useRouter();
-  const projects = items ?? getAllProjects();
+  const allItems = items ?? getAllProjects();
+  const [activeFilter, setActiveFilter] = useState<'all' | ProjectTag>('all');
+  const projects = useMemo(
+    () => (activeFilter === 'all' ? allItems : allItems.filter((p) => p.tags.includes(activeFilter))),
+    [allItems, activeFilter],
+  );
   const hrefFor = useCallback(
     (p: Project) => `${basePath ?? (p.category === 'design' ? '/design' : '/work')}/${p.slug}`,
     [basePath],
@@ -517,6 +527,11 @@ export default function ProjectsPage({
     [hide, forceHide],
   );
 
+  // A new filter changes which row sits at each index, so drop any active hover state.
+  useEffect(() => {
+    deactivateAll(true);
+  }, [activeFilter, deactivateAll]);
+
   useEffect(() => {
     const handleCheckScroll = () => {
       if (
@@ -593,6 +608,29 @@ export default function ProjectsPage({
     gsap.to(row, { backgroundColor: 'rgba(196, 93, 62, 0.04)', duration: 0.15, ease: 'power2.out' });
   };
 
+  const filterRow = filters && filters.length > 1 ? (
+    <div role="group" aria-label="Filter projects" className="mt-6 mb-8 flex flex-wrap gap-2 sm:gap-3">
+      {filters.map((option) => {
+        const isActive = activeFilter === option.id;
+        return (
+          <button
+            key={option.id}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => setActiveFilter(option.id)}
+            className={`text-xs sm:text-sm font-mono tracking-wider px-3.5 py-1.5 rounded-full border transition-all duration-300 cursor-pointer ${
+              isActive
+                ? 'bg-charcoal text-cream border-charcoal font-semibold'
+                : 'bg-transparent text-warm border-border hover:border-charcoal hover:text-charcoal'
+            }`}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
+  ) : null;
+
   return (
     <section
       id={id}
@@ -607,6 +645,7 @@ export default function ProjectsPage({
             className="text-[clamp(2.5rem,7vw,6.5rem)] leading-none text-charcoal"
           />
         </div>
+        {filterRow}
         <hr className="border-t border-border w-full mb-4" />
 
         <div className="flex flex-col w-full" onMouseLeave={handleTableMouseLeave}>
@@ -722,7 +761,7 @@ export default function ProjectsPage({
         </div>
       </div>
 
-      <MobileSnapProjects projects={projects} router={router} hrefFor={hrefFor} heading={heading} />
+      <MobileSnapProjects projects={projects} router={router} hrefFor={hrefFor} heading={heading} filterRow={filterRow} />
     </section>
   );
 }

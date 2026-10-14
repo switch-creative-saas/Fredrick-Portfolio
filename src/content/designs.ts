@@ -12,3 +12,11 @@ export function getAllDesigns(): Project[] {
 export function getDesignBySlug(slug: string): Project | undefined {
   return designs.find((d) => d.slug === slug);
 }
+
+export const designPage = {
+  heading: [{ t: 'DESIGN' }, { t: 'work', serif: true }],
+  listHeading: [{ t: 'SELECTED' }, { t: 'designs', serif: true }],
+  intro: 'TODO(fred): one or two sentences on the design work you do.',
+  comingSoon: 'Selected work coming soon.',
+  cta: { top: 'START A PROJECT', bottom: 'CONTACT →', href: '/contact?topic=design' },
+};

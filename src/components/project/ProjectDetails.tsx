@@ -9,7 +9,7 @@ import AnimatedButton from '@/components/ui/AnimatedButton';
 import { gsap, SplitText, useGSAP } from '@/lib/gsap';
 import { EASE } from '@/lib/motion';
 import { FaArrowUp, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import { Project, getAdjacent, getAllProjects } from '@/content/projects';
+import { Project, ProjectTextSection, getAdjacent, getAllProjects, detailCopy } from '@/content/projects';
 import { getAllDesigns } from '@/content/designs';
 import { site } from '@/content/site';
 import { useReducedMotion } from '@/lib/useReducedMotion';
@@ -19,6 +19,20 @@ export type ProjectCollection = 'work' | 'design';
 const COLLECTIONS: Record<ProjectCollection, { basePath: string; backLabel: string; items: () => Project[] }> = {
   work: { basePath: '/work', backLabel: 'Back to Work', items: getAllProjects },
   design: { basePath: '/design', backLabel: 'Back to Design', items: getAllDesigns },
+};
+
+/** Text sections shown per collection, in order. Missing sections are skipped. */
+const SECTIONS: Record<ProjectCollection, { key: ProjectTextSection; label: string }[]> = {
+  work: [
+    { key: 'overview', label: 'Overview' },
+    { key: 'architecture', label: 'Architecture' },
+    { key: 'implementation', label: 'Engineering' },
+  ],
+  design: [
+    { key: 'overview', label: 'Overview' },
+    { key: 'process', label: 'Process' },
+    { key: 'outcome', label: 'Outcome' },
+  ],
 };
 
 interface ProjectDetailsProps {
@@ -33,6 +47,7 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
   const reduced = useReducedMotion();
   const { basePath, backLabel, items } = COLLECTIONS[collection];
   const { prev, next } = getAdjacent(items(), project.slug);
+  const isDesign = collection === 'design';
 
   useGSAP(
     () => {
@@ -159,6 +174,9 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
               )}
             </div>
           )}
+          {!project.liveUrl && !project.github && (
+            <p className="font-mono text-xs uppercase tracking-widest text-warm-light">{detailCopy.privateCodebase}</p>
+          )}
         </header>
 
         {project.images && project.images.length > 0 && (
@@ -180,48 +198,33 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
           </div>
         )}
 
-        <div className="flex flex-col md:grid md:grid-cols-12 gap-2 sm:gap-3 md:gap-8 mb-8 sm:mb-12 md:mb-20">
-          <div className="md:col-span-4">
-            <p className="font-mono text-xs uppercase tracking-widest text-accent md:text-warm-light">(Overview)</p>
-          </div>
-          <div className="md:col-span-8">
-            <ScrollWordReveal
-              text={project.overview}
-              offset={['start 0.98', 'end 0.85']}
-              className="text-base sm:text-lg md:text-2xl text-light font-sans leading-relaxed"
-            />
-          </div>
-        </div>
+        {SECTIONS[collection].map(({ key, label }, i) => {
+          const text = project[key];
+          if (!text) return null;
+          return (
+            <div key={key} className="flex flex-col md:grid md:grid-cols-12 gap-2 sm:gap-3 md:gap-8 mb-8 sm:mb-12 md:mb-20">
+              <div className="md:col-span-4">
+                <p className="font-mono text-xs uppercase tracking-widest text-accent md:text-warm-light">({label})</p>
+              </div>
+              <div className="md:col-span-8">
+                <ScrollWordReveal
+                  text={text}
+                  offset={i === 0 ? ['start 0.98', 'end 0.85'] : ['start 0.98', 'end 0.88']}
+                  className={
+                    i === 0
+                      ? 'text-base sm:text-lg md:text-2xl text-light font-sans leading-relaxed'
+                      : 'text-sm sm:text-base md:text-lg text-light/80 font-sans leading-relaxed'
+                  }
+                />
+              </div>
+            </div>
+          );
+        })}
 
-        <div className="flex flex-col md:grid md:grid-cols-12 gap-2 sm:gap-3 md:gap-8 mb-8 sm:mb-12 md:mb-20">
-          <div className="md:col-span-4">
-            <p className="font-mono text-xs uppercase tracking-widest text-accent md:text-warm-light">(Architecture)</p>
-          </div>
-          <div className="md:col-span-8">
-            <ScrollWordReveal
-              text={project.architecture}
-              offset={['start 0.98', 'end 0.88']}
-              className="text-sm sm:text-base md:text-lg text-light/80 font-sans leading-relaxed"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col md:grid md:grid-cols-12 gap-2 sm:gap-3 md:gap-8 mb-10 sm:mb-14 md:mb-20">
-          <div className="md:col-span-4">
-            <p className="font-mono text-xs uppercase tracking-widest text-accent md:text-warm-light">(Engineering)</p>
-          </div>
-          <div className="md:col-span-8">
-            <ScrollWordReveal
-              text={project.implementation}
-              offset={['start 0.98', 'end 0.88']}
-              className="text-sm sm:text-base md:text-lg text-light/80 font-sans leading-relaxed"
-            />
-          </div>
-        </div>
-
+        {project.myRole && project.myRole.length > 0 && (
         <div className="mb-12 sm:mb-16 md:mb-24">
           <AnimatedHeading
-            words={[{ t: 'KEY' }, { t: 'moves', serif: true }]}
+            words={detailCopy.keyMovesHeading}
             showLine={false}
             containerClassName="mb-6 sm:mb-10"
             className="text-[clamp(1.75rem,4.5vw,3.4rem)] text-white"
@@ -241,6 +244,7 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
             ))}
           </ul>
         </div>
+        )}
 
         {project.images && project.images.length > 1 && (
           <div className="flex flex-col gap-6 sm:gap-10 md:gap-16 mb-14 sm:mb-18 md:mb-28">
@@ -249,18 +253,21 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
             </div>
             {project.images.slice(1).map((img, i) => {
               const actualIdx = i + 1;
-              const wide = actualIdx % 3 === 0;
+              // Design work is shown full width and taller; dev screenshots keep the staggered layout.
+              const wide = isDesign || actualIdx % 3 === 0;
               return (
                 <figure
                   key={`${project.slug}-img-${actualIdx}`}
                   className={`relative ${wide ? 'w-full' : 'w-full md:w-10/12'} ${
-                    actualIdx % 3 === 1 ? 'md:ml-auto' : ''
+                    !isDesign && actualIdx % 3 === 1 ? 'md:ml-auto' : ''
                   }`}
                 >
                   <div
-                    className={`overflow-hidden rounded-xl bg-surface-card border border-surface-border relative aspect-[16/10] sm:aspect-[16/9] md:aspect-[21/9] ${
-                      wide ? 'max-h-[500px]' : 'max-h-[420px]'
-                    } w-full`}
+                    className={`overflow-hidden rounded-xl bg-surface-card border border-surface-border relative w-full ${
+                      isDesign
+                        ? 'aspect-[4/3] md:aspect-[16/10]'
+                        : `aspect-[16/10] sm:aspect-[16/9] md:aspect-[21/9] ${wide ? 'max-h-[500px]' : 'max-h-[420px]'}`
+                    }`}
                   >
                     <div className="pd-figure-parallax absolute inset-0 overflow-hidden">
                       <div className="pd-figure-inner absolute inset-x-0 -top-[8%] h-[116%]" style={{ willChange: 'transform' }}>
@@ -286,19 +293,23 @@ export default function ProjectDetails({ project, collection }: ProjectDetailsPr
           </div>
         )}
 
-        <div className="mb-12 sm:mb-16 md:mb-20">
-          <p className="font-mono text-xs uppercase tracking-widest text-warm-light mb-3 sm:mb-5">Built with</p>
-          <div className="flex flex-wrap gap-2">
-            {project.tech?.map((t) => (
-              <span
-                key={t}
-                className="font-mono text-xs px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-surface-mid border border-white/[0.08] text-cream"
-              >
-                {t}
-              </span>
-            ))}
+        {project.tech.length > 0 && (
+          <div className="mb-12 sm:mb-16 md:mb-20">
+            <p className="font-mono text-xs uppercase tracking-widest text-warm-light mb-3 sm:mb-5">
+              {isDesign ? detailCopy.toolsLabel : detailCopy.builtWithLabel}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {project.tech.map((t) => (
+                <span
+                  key={t}
+                  className="font-mono text-xs px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-surface-mid border border-white/[0.08] text-cream"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {(project.liveUrl || project.github) && (
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-8 rounded-2xl bg-surface-card border border-white/[0.08] mb-12 sm:mb-16 md:mb-20">
