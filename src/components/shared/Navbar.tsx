@@ -6,7 +6,7 @@ import { useTransitionState } from 'next-transition-router';
 import { useLenis } from '@/components/providers/SmoothScrollProvider';
 import AnimatedLink from '@/components/ui/AnimateLink';
 import { useHandleLinkClick } from '@/lib/navigation';
-import { site, socials } from '@/lib/site';
+import { site, socials, navLinks } from '@/content/site';
 import Link from 'next/link';
 import Lenis from 'lenis';
 import { Copyright } from 'lucide-react';
@@ -130,19 +130,19 @@ const NavbarBrand: React.FC<NavbarBrandProps> = ({ logoRef, handleLinkClick }) =
           handleLinkClick('/#top');
         }}
         className="group flex items-center cursor-pointer select-none py-1 text-warm"
-        aria-label="Aitezaz Sikandar Home"
+        aria-label={`${site.name} home`}
       >
         <div className="transition-transform duration-500 ease-in-expo group-hover:rotate-[360deg] flex items-center justify-center">
           <Copyright className="w-[18px] h-[18px]" />
         </div>
         <div className="relative ms-2 flex items-center whitespace-nowrap text-warm text-lg font-sans tracking-wide font-medium leading-none">
-          <span>aitezaz</span>
-          <span className="relative inline-flex items-center overflow-hidden transition-all duration-500 ease-in-expo w-[32px] group-hover:w-[86px]">
-            <span className="transition-transform duration-500 ease-in-expo group-hover:-translate-x-full inline-block">
-              dev
+          <span>{site.logo.lead}</span>
+          <span className="relative inline-flex items-center overflow-hidden transition-all duration-500 ease-in-expo w-[24px] group-hover:w-[76px]">
+            <span className="ps-1.5 transition-transform duration-500 ease-in-expo group-hover:-translate-x-full inline-block">
+              {site.logo.short}
             </span>
             <span className="absolute left-0 ps-1.5 transition-transform duration-500 ease-in-expo translate-x-full group-hover:translate-x-0 inline-block">
-              sikandar
+              {site.logo.long}
             </span>
           </span>
         </div>
@@ -459,7 +459,7 @@ const FullscreenMenu: React.FC<FullscreenMenuProps> = ({ isOpen, onClose, handle
             </div>
 
             <div className="flex gap-4 md:gap-6 justify-start flex-wrap">
-              {[socials.github, socials.source, socials.linkedin].map((s) => (
+              {[socials.github, socials.linkedin, socials.x].map((s) => (
                 <Magnetic key={s.label} strength={0.3}>
                   <a
                     href={s.href}
@@ -657,13 +657,7 @@ const Navbar: React.FC<NavbarProps> = ({ hamburgerOnly = false }) => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const handleLinkClick = useHandleLinkClick(setIsMenuOpen);
 
-  const links = [
-    { name: 'Home', href: '/#top', menuOnly: true },
-    { name: 'About', href: '/#about' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Work', href: '/#projects' },
-    { name: 'Contact', href: '/#contact' },
-  ];
+  const links = navLinks;
 
   const navStyle: React.CSSProperties = {
     opacity: isTransitioning ? 0 : 1,

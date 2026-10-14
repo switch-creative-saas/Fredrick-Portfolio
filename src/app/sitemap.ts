@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
-import { getAllProjects } from '@/lib/projects';
-import { site } from '@/lib/site';
+import { getAllProjects } from '@/content/projects';
+import { site } from '@/content/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const projects = getAllProjects().map((p) => ({

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import AnimatedHeading from '@/components/ui/AnimateHeading';
 import ScrollWordReveal from '@/components/ui/ScrollWordReveal';
+import { services as servicesContent } from '@/content/home';
 
 const Services = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -28,49 +29,9 @@ const Services = () => {
     return () => ctx.revert();
   }, []);
 
-  const headingWords = [
-    { t: 'WHAT' },
-    { t: 'i', serif: true },
-    { t: 'DO' },
-  ];
-  const descriptionText =
-    "I specialize in building full-stack web applications that are fast, reliable, and user-friendly. With a solid foundation in both frontend and backend technologies, I help bring ideas to life whether it's for a business, a startup, or a product team.";
-
-  const services = [
-    {
-      id: '01',
-      title: 'Full Stack Development',
-      description:
-        'End-to-end development of modern web applications, covering everything from frontend interfaces to backend APIs. I build complete, maintainable, and scalable systems using the MERN stack and modern tooling.',
-      items: [
-        'MERN Stack (MongoDB, Express.js, React, Node.js)',
-        'REST APIs & Integration',
-        'Authentication & Authorization',
-      ],
-    },
-    {
-      id: '02',
-      title: 'Frontend Development',
-      description:
-        'Crafting responsive, accessible, and elegant interfaces that deliver exceptional user experiences. I focus on clarity, performance, and seamless interaction across devices.',
-      items: [
-        'React, Next.js, TailwindCSS, GSAP',
-        'Optimized Rendering & Animations',
-        'Figma to Code Implementation',
-      ],
-    },
-    {
-      id: '03',
-      title: 'Optimization & Performance',
-      description:
-        'Optimizing codebases, APIs, and assets for speed, scalability, and maintainability. I ensure your applications run efficiently with best practices in caching, SEO, and deployment.',
-      items: [
-        'Performance Tuning & Code Refactoring',
-        'SEO & Accessibility Optimization',
-        'Deployment (Vercel, AWS, Docker)',
-      ],
-    },
-  ];
+  const headingWords = servicesContent.heading;
+  const descriptionText = servicesContent.description;
+  const services = servicesContent.items;
 
   return (
     <section
@@ -88,7 +49,7 @@ const Services = () => {
           <div className="grid md:grid-cols-12 gap-4 md:gap-8">
             <div className="md:col-start-6 md:col-span-7 flex flex-col md:flex-row gap-3 md:gap-10">
               <span className="font-mono text-sm sm:text-base md:text-base text-warm uppercase tracking-[0.3em] font-medium whitespace-nowrap inline-block">
-                (Services)
+                {servicesContent.label}
               </span>
 
               <ScrollWordReveal

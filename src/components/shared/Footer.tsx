@@ -6,7 +6,7 @@ import Magnetic from '@/components/ui/Magnetic';
 import { FaArrowUp } from 'react-icons/fa';
 import { useHandleLinkClick } from '@/lib/navigation';
 import { useLenis } from '@/components/providers/SmoothScrollProvider';
-import { site, socialList, navLinks } from '@/lib/site';
+import { site, socialList, navLinks } from '@/content/site';
 import Lenis from 'lenis';
 
 const Footer = () => {

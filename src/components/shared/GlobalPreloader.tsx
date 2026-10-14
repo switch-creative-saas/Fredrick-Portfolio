@@ -2,15 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from '@/lib/gsap';
+import { site } from '@/content/site';
 
-export const preloaderWords = [
-  'السلام علیکم',
-  'नमस्ते',
-  'Hola',
-  'مرحباً',
-  'په خیر راغلي',
-  'Welcome',
-];
+export const preloaderWords = site.greetings;
 
 const MIN_DISPLAY_MS = 1400;
 const HARD_CAP_MS = 3200;

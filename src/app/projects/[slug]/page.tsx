@@ -1,6 +1,7 @@
 import ProjectDetails from '@/components/project/ProjectDetails';
-import { getProjectBySlug, getAllProjects } from '@/lib/projects';
+import { getProjectBySlug, getAllProjects } from '@/content/projects';
 import { notFound } from 'next/navigation';
+import { site } from '@/content/site';
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: project.title,
     description: project.description,
     openGraph: {
-      title: `${project.title} - Aitezaz Sikandar`,
+      title: `${project.title} | ${site.name}`,
       description: project.description,
       images: [
         {
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: PageProps) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${project.title} - Aitezaz Sikandar`,
+      title: `${project.title} | ${site.name}`,
       description: project.description,
       images: [project.hoverImage || project.images[0]],
     },

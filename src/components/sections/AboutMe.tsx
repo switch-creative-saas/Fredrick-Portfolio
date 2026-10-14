@@ -5,46 +5,50 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import ScrollWordReveal from '@/components/ui/ScrollWordReveal';
 import AnimatedHeading from '@/components/ui/AnimateHeading';
 import FlowField from '@/components/canvas/FlowField';
+import { aboutMe } from '@/content/home';
+import { awards } from '@/content/awards';
+import { formatRange, getTimeline, type TimelineKind } from '@/content/timeline';
 
-const CREDENTIALS = [
-  {
-    year: '2026',
-    title: 'Software Engineer Intern - MERN Stack',
-    organization: 'e-strats, Islamabad',
-    type: 'Industry',
-  },
-  {
-    year: '2026',
-    title: 'HEC National Skills Competency Test (NSCT)',
-    organization: 'HEC, PSEB & P@SHA',
-    stat: '95th Percentile, Top 5% nationwide',
+interface Credential {
+  year: string;
+  title: string;
+  organization: string;
+  stat?: string;
+  type: string;
+}
+
+const KIND_LABEL: Record<TimelineKind, string> = {
+  education: 'Education',
+  experience: 'Experience',
+  venture: 'Venture',
+};
+
+const fromTimeline = (kind: TimelineKind): Credential[] =>
+  getTimeline(kind).map((t) => ({
+    year: formatRange(t),
+    title: t.title,
+    organization: t.organization,
+    stat: t.description,
+    type: KIND_LABEL[kind],
+  }));
+
+const CREDENTIALS: Credential[] = [
+  ...fromTimeline('experience'),
+  ...awards.map((a) => ({
+    year: String(a.year),
+    title: `${a.title}, ${a.event}`,
+    organization: a.organizer ?? '',
+    stat: a.detail,
     type: 'Recognition',
-  },
-  {
-    year: '2024-25',
-    title: 'Web and Mobile App Development',
-    organization: 'Saylani Mass IT Training (SMIT), Peshawar',
-    stat: 'Full-Stack MERN, TypeScript, Next.js & Hybrid Apps',
-    type: 'Certification',
-  },
-  {
-    year: '2022-26',
-    title: 'BS Computer Science',
-    organization: 'University of Peshawar',
-    stat: '3.60 / 4.00 GPA',
-    type: 'Education',
-  },
+  })),
+  ...fromTimeline('education'),
+  ...fromTimeline('venture'),
 ];
 
 const About = () => {
-  const headingWords = [
-    { t: 'WHO' },
-    { t: 'am', serif: true },
-    { t: 'i?' },
-  ];
-  const descriptionText =
-    'I am a software engineer driven by a passion for building clean, intuitive, and reliable digital experiences.';
-  const aboutMeText = `I build web applications that bridge thoughtful frontend interfaces with robust backend systems. To me, software is more than code on a screen; it is about making technology feel effortless and genuinely useful to real people.\n\nMy journey began with a simple curiosity for how things work under the hood. Over time, that curiosity evolved into a genuine passion for fluid interface animations, reliable backend architecture, and building user journeys that feel effortless and alive.\n\nWhether I am polishing micro-interactions or engineering full-stack systems, my core focus remains unchanged: creating software that brings people joy, solves real problems, and leaves a lasting positive impact.`;
+  const headingWords = aboutMe.heading;
+  const descriptionText = aboutMe.description;
+  const aboutMeText = aboutMe.body;
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -241,7 +245,7 @@ const About = () => {
 
             <div className="col-span-12 md:col-span-7 lg:col-span-6 md:col-start-6 lg:col-start-7 flex flex-col justify-center space-y-8">
               <span className="about-label font-mono text-sm sm:text-base md:text-base text-warm uppercase tracking-[0.3em] font-medium text-center md:text-left inline-block">
-                (About Me)
+                {aboutMe.label}
               </span>
               <div className="space-y-6">
                 {aboutMeText.split('\n\n').map((p, i) => (
@@ -259,12 +263,12 @@ const About = () => {
           <div ref={tableRef} className="pt-12 md:pt-20 border-t border-white/10">
             <div className="mb-12 text-center md:mb-20">
               <span className="cred-section-label font-mono text-sm sm:text-base md:text-base text-warm uppercase tracking-[0.3em] font-medium inline-block opacity-0">
-                (Experience)
+                {aboutMe.timelineLabel}
               </span>
               <h3 className="mt-5 font-display text-[clamp(2.5rem,7vw,6.5rem)] font-black uppercase tracking-tight leading-none text-light">
-                <span className="experience-word inline-block overflow-hidden align-top"><span className="block">The</span></span>{' '}
-                <span className="experience-word inline-block overflow-hidden align-top"><span className="serif-accent block normal-case tracking-[-0.05em] text-accent">path</span></span>{' '}
-                <span className="experience-word inline-block overflow-hidden align-top"><span className="block">so far.</span></span>
+                <span className="experience-word inline-block overflow-hidden align-top"><span className="block">{aboutMe.timelineHeading.before}</span></span>{' '}
+                <span className="experience-word inline-block overflow-hidden align-top"><span className="serif-accent block normal-case tracking-[-0.05em] text-accent">{aboutMe.timelineHeading.accent}</span></span>{' '}
+                <span className="experience-word inline-block overflow-hidden align-top"><span className="block">{aboutMe.timelineHeading.after}</span></span>
               </h3>
             </div>
 
@@ -283,7 +287,7 @@ const About = () => {
                 {CREDENTIALS.map((item, idx) => {
                   const isLeft = idx % 2 === 0;
                   return (
-                    <article key={item.title} data-side={isLeft ? 'left' : 'right'} className="cred-row relative grid grid-cols-[32px_1fr] gap-x-5 opacity-0 md:grid-cols-[1fr_96px_1fr] md:gap-x-0">
+                    <article key={`${item.type}-${item.title}-${item.organization}`} data-side={isLeft ? 'left' : 'right'} className="cred-row relative grid grid-cols-[32px_1fr] gap-x-5 opacity-0 md:grid-cols-[1fr_96px_1fr] md:gap-x-0">
                       <div className="relative order-1 md:col-start-2 md:row-start-1 md:justify-self-center">
                         <span className="timeline-dot relative z-10 block h-[15px] w-[15px] rounded-full border-[3px] border-ink bg-cream" />
                         <span aria-hidden="true" className={`timeline-connector absolute top-[7px] hidden h-px w-14 bg-white/25 md:block ${isLeft ? 'right-full origin-right' : 'left-full origin-left'}`} />

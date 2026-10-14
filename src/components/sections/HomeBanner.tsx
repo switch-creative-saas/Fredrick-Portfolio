@@ -6,7 +6,8 @@ import dynamic from 'next/dynamic';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import Magnetic from '@/components/ui/Magnetic';
 import { EASE } from '@/lib/motion';
-import { site } from '@/lib/site';
+import { site } from '@/content/site';
+import { hero } from '@/content/home';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
 const AmbientGeometry = dynamic(() => import('@/components/canvas/AmbientGeometry'), {
@@ -66,7 +67,7 @@ const StampBadge = ({ onClick }: { onClick: () => void }) => (
     <button
       type="button"
       onClick={onClick}
-      aria-label="Scroll to contact section"
+      aria-label={hero.stampLabel}
       className="group relative w-28 h-28 lg:w-36 lg:h-36 rounded-full grid place-items-center select-none"
     >
       <svg viewBox="0 0 200 200" className="stamp-disc absolute inset-0 w-full h-full" aria-hidden="true">
@@ -78,7 +79,7 @@ const StampBadge = ({ onClick }: { onClick: () => void }) => (
           style={{ fontSize: '15.5px', letterSpacing: '0.305em' }}
         >
           <textPath href="#stamp-circle">
-            AVAILABLE FOR WORK • LET&apos;S BUILD • 
+            {hero.stamp}
           </textPath>
         </text>
       </svg>
@@ -280,13 +281,13 @@ const HomeBanner = () => {
                 data-hero-line
                 className="block font-display font-black uppercase text-hero tracking-tight"
               >
-                AITEZAZ
+                {hero.nameLines[0]}
               </span>
               <span
                 data-hero-line
                 className="serif-accent block text-hero-sm leading-[0.85] md:ml-[14vw]"
               >
-                sikandar
+                {hero.nameLines[1]}
               </span>
             </span>
           </h1>
@@ -302,7 +303,7 @@ const HomeBanner = () => {
               ref={paragraphRef}
               className="text-warm font-sans text-base sm:text-lg md:text-xl leading-relaxed mb-8 md:mb-10 text-center mx-auto"
             >
-              Full-stack engineer building fast, scalable, and reliable web applications.
+              {hero.intro}
             </p>
 
             <div ref={tickerRef} className="w-full flex justify-center">
@@ -312,23 +313,23 @@ const HomeBanner = () => {
             <div ref={buttonsRef} className="flex flex-row justify-center items-center gap-2.5 sm:gap-4 flex-wrap w-full max-w-full mx-auto px-2">
               <AnimatedButton
                 onClick={() => handleScroll('projects')}
-                topText="PROJECTS"
-                bottomText="VIEW WORK →"
+                topText={hero.ctas.work.top}
+                bottomText={hero.ctas.work.bottom}
                 variant="primary"
               />
               <AnimatedButton
                 onClick={() => handleScroll('contact')}
-                topText="CONTACT"
-                bottomText="GET IN TOUCH →"
+                topText={hero.ctas.contact.top}
+                bottomText={hero.ctas.contact.bottom}
                 variant="light"
               />
               <AnimatedButton
                 as="a"
-                href="/01_aitezaz_resume.pdf"
+                href={site.cvPath}
                 target="_blank"
                 rel="noopener noreferrer"
-                topText="RESUME"
-                bottomText="DOWNLOAD →"
+                topText={hero.ctas.cv.top}
+                bottomText={hero.ctas.cv.bottom}
                 variant="outline"
               />
             </div>

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
-import { site } from '@/lib/site';
+import { site } from '@/content/site';
 
 interface ContactRequestBody {
   name?: string;
@@ -213,8 +213,8 @@ export async function POST(request: Request) {
       if (process.env.NODE_ENV === 'development') {
         const logDir = process.cwd();
         const logFile = path.join(logDir, 'messages.txt');
-        const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' });
-        const logEntry = `\n======================================\nDate: ${timestamp} PKT\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
+        const timestamp = new Date().toLocaleString('en-US', { timeZone: site.timeZone });
+        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
         fs.appendFileSync(logFile, logEntry, 'utf8');
 
         return NextResponse.json({
@@ -266,8 +266,8 @@ export async function POST(request: Request) {
       try {
         const logDir = process.cwd();
         const logFile = path.join(logDir, 'messages.txt');
-        const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' });
-        const logEntry = `\n======================================\nDate: ${timestamp} PKT\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
+        const timestamp = new Date().toLocaleString('en-US', { timeZone: site.timeZone });
+        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
         fs.appendFileSync(logFile, logEntry, 'utf8');
 
         return NextResponse.json({

@@ -5,83 +5,9 @@ import Image from 'next/image';
 import { gsap, useGSAP } from '@/lib/gsap';
 import AnimatedHeading from '@/components/ui/AnimateHeading';
 import ScrollWordReveal from '@/components/ui/ScrollWordReveal';
+import { techStack } from '@/content/home';
 
-export interface TechItem {
-  name: string;
-  category: 'frontend' | 'backend' | 'database' | 'devops' | 'tools';
-  icon: string;
-  level?: string;
-  description?: string;
-}
-
-export interface StackCategory {
-  id: string;
-  title: string;
-  label?: string;
-  description?: string;
-  technologies: TechItem[];
-}
-
-export const STACK_SECTIONS: StackCategory[] = [
-  {
-    id: 'frontend',
-    title: 'FRONTEND',
-    technologies: [
-      { name: 'JavaScript', category: 'frontend', icon: '/Services/js.png' },
-      { name: 'TypeScript', category: 'frontend', icon: '/Services/typescript.svg' },
-      { name: 'React', category: 'frontend', icon: '/Services/react.png' },
-      { name: 'Next.js', category: 'frontend', icon: '/Services/next.webp' },
-      { name: 'Redux Toolkit', category: 'frontend', icon: '/Services/reduxtoolkit.svg' },
-      { name: 'Tailwind CSS', category: 'frontend', icon: '/Services/tailwind.png' },
-      { name: 'Bootstrap', category: 'frontend', icon: '/Services/bootstrap.svg' },
-      { name: 'GSAP', category: 'frontend', icon: '/Services/gsap.png' },
-    ],
-  },
-  {
-    id: 'backend',
-    title: 'BACKEND & REAL-TIME',
-    technologies: [
-      { name: 'Node.js', category: 'backend', icon: '/Services/node.png' },
-      { name: 'Express.js', category: 'backend', icon: '/Services/express.png' },
-      { name: 'Socket.io', category: 'backend', icon: '/Services/socketio.svg' },
-      { name: 'Firebase', category: 'backend', icon: '/Services/firebase.svg' },
-    ],
-  },
-  {
-    id: 'database',
-    title: 'DATABASE & ORM',
-    technologies: [
-      { name: 'MongoDB', category: 'database', icon: '/Services/mongodb.svg' },
-      { name: 'Mongoose', category: 'database', icon: '/Services/mongoose.svg' },
-      { name: 'MySQL', category: 'database', icon: '/Services/mysql.svg' },
-    ],
-  },
-  {
-    id: 'devops',
-    title: 'DEVOPS & CLOUD',
-    technologies: [
-      { name: 'Docker', category: 'devops', icon: '/Services/docker.svg' },
-      { name: 'GitHub Actions', category: 'devops', icon: '/Services/githubactions.svg' },
-      { name: 'AWS', category: 'devops', icon: '/Services/aws.webp' },
-      { name: 'Nginx', category: 'devops', icon: '/Services/nginx.svg' },
-      { name: 'Linux', category: 'devops', icon: '/Services/linux.svg' },
-    ],
-  },
-  {
-    id: 'tools',
-    title: 'AI, TESTING & TOOLS',
-    technologies: [
-      { name: 'Gemini AI', category: 'tools', icon: '/Services/geminiai.svg' },
-      { name: 'Jest', category: 'tools', icon: '/Services/jest.svg' },
-      { name: 'Zod', category: 'tools', icon: '/Services/zod.svg' },
-      { name: 'Stripe', category: 'tools', icon: '/Services/stripe.svg' },
-      { name: 'Cloudinary', category: 'tools', icon: '/Services/cloudinary.svg' },
-      { name: 'Git', category: 'tools', icon: '/Services/git.png' },
-      { name: 'Postman', category: 'tools', icon: '/Services/postman-icon.svg' },
-      { name: 'Figma', category: 'tools', icon: '/Services/figma.png' },
-    ],
-  },
-];
+const STACK_SECTIONS = techStack.sections;
 
 const TechStack = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -89,21 +15,12 @@ const TechStack = () => {
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRefs = useRef<(HTMLHeadingElement | null)[]>([]);
 
-  const headingWords = [
-    { t: 'MY' },
-    { t: 'TECH' },
-    { t: 'stack', serif: true },
-  ];
-  const descriptionText =
-    'A selection of technologies I use to design, build, and deploy full-stack web applications.';
+  const headingWords = techStack.heading;
+  const descriptionText = techStack.description;
 
   const filterOptions = [
-    { id: 'all', label: 'All Categories' },
-    { id: 'frontend', label: 'Frontend' },
-    { id: 'backend', label: 'Backend & Real-Time' },
-    { id: 'database', label: 'Database & ORM' },
-    { id: 'devops', label: 'DevOps & Cloud' },
-    { id: 'tools', label: 'AI, Testing & Tools' },
+    { id: 'all', label: techStack.allLabel },
+    ...STACK_SECTIONS.map((s) => ({ id: s.id, label: s.filterLabel })),
   ];
 
   const visibleSections =
@@ -208,7 +125,7 @@ const TechStack = () => {
 
         <div className="mb-8 md:hidden">
           <AnimatedHeading
-            words={[{ t: 'MY' }, { t: 'stack', serif: true }]}
+            words={techStack.mobileHeading}
             className="text-[clamp(2.5rem,7vw,6.5rem)] tracking-tight mb-4"
           />
         </div>

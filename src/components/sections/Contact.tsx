@@ -6,7 +6,8 @@ import ScrollWordReveal from '@/components/ui/ScrollWordReveal';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE } from '@/lib/motion';
-import { site } from '@/lib/site';
+import { site } from '@/content/site';
+import { contactSection } from '@/content/home';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
 const Contact = () => {
@@ -16,10 +17,7 @@ const Contact = () => {
   const ctaRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
-  const headingWords = [
-    { t: "LET'S" },
-    { t: 'talk', serif: true },
-  ];
+  const headingWords = contactSection.heading;
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -180,7 +178,7 @@ const Contact = () => {
           />
           <div className="max-w-2xl mb-12">
             <ScrollWordReveal
-              text="Have a project in mind or just want to say hello? Feel free to reach out."
+              text={contactSection.intro}
               offset={['start 0.95', 'end 0.7']}
               className="text-base sm:text-lg text-gray-soft font-sans leading-relaxed"
             />

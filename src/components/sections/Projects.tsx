@@ -6,7 +6,8 @@ import { Link } from 'next-transition-router';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { useRouter } from 'next/navigation';
 import AnimatedHeading from '@/components/ui/AnimateHeading';
-import { getAllProjects, Project } from '@/lib/projects';
+import { getAllProjects, Project } from '@/content/projects';
+import { projectsSection } from '@/content/home';
 
 const useHoverPreview = (containerRef?: React.RefObject<HTMLDivElement | null>) => {
   const floatingRef = useRef<HTMLDivElement | null>(null);
@@ -295,7 +296,7 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
     <div ref={sectionRef} className="md:hidden bg-cream pb-12">
       <div className="px-6 pt-16 pb-8">
         <AnimatedHeading
-          words={[{ t: 'SELECTED' }, { t: 'works', serif: true }]}
+          words={projectsSection.heading}
           className="text-[clamp(3rem,14vw,5rem)] leading-none text-charcoal"
         />
       </div>
@@ -382,7 +383,7 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
                     className="font-mono text-[11px] uppercase tracking-widest"
                     style={{ color: 'rgba(255,255,255,0.45)' }}
                   >
-                    View Project
+                    {projectsSection.viewLabel}
                   </span>
                   <span
                     className="flex items-center justify-center w-9 h-9 rounded-full text-[#0A0F0D] text-sm"
@@ -590,7 +591,7 @@ export default function ProjectsPage() {
       <div className="hidden md:block pt-16 pb-20 md:pt-20 md:pb-24 px-6 sm:px-8 md:px-12 lg:px-16 max-w-7xl mx-auto">
         <div className="mb-12">
           <AnimatedHeading
-            words={[{ t: 'SELECTED' }, { t: 'works', serif: true }]}
+            words={projectsSection.heading}
             className="text-[clamp(2.5rem,7vw,6.5rem)] leading-none text-charcoal"
           />
         </div>
@@ -644,7 +645,7 @@ export default function ProjectsPage() {
 
               <div className="flex-[0_0_200px] text-right flex flex-col justify-end items-end pb-2">
                 <span className="font-mono text-xs uppercase tracking-widest text-charcoal group-hover:text-accent transition-colors duration-250 flex items-center gap-1">
-                  <span>View Project</span>
+                  <span>{projectsSection.viewLabel}</span>
                   <span className="inline-block transition-transform duration-200 group-hover:translate-x-1.5">
                     →
                   </span>

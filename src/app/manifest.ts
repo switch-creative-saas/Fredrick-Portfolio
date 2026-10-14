@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next';
-import { site } from '@/lib/site';
+import { site } from '@/content/site';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${site.name} — Full Stack Developer`,
-    short_name: site.name,
+    name: site.name,
+    short_name: site.firstName,
     description: site.tagline,
     start_url: '/',
     display: 'standalone',
@@ -12,9 +12,9 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#34D399',
     icons: [
       {
-        src: '/logo.webp',
+        src: '/icon.svg',
         sizes: 'any',
-        type: 'image/webp',
+        type: 'image/svg+xml',
       },
     ],
   };

@@ -9,9 +9,9 @@ import AnimatedButton from '@/components/ui/AnimatedButton';
 import { gsap, SplitText, useGSAP } from '@/lib/gsap';
 import { EASE } from '@/lib/motion';
 import { FaArrowUp, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import { Project } from '@/lib/projects';
-import { getAdjacentProjects } from '@/lib/projects';
-import { site } from '@/lib/site';
+import { Project } from '@/content/projects';
+import { getAdjacentProjects } from '@/content/projects';
+import { site } from '@/content/site';
 
 export default function ProjectDetails({ project }: { project: Project }) {
   const rootRef = useRef<HTMLElement>(null);

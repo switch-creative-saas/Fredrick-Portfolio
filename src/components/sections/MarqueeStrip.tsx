@@ -4,12 +4,13 @@ import React, { useEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { hasFinePointer } from '@/lib/pointer';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { marquee } from '@/content/home';
 
 export default function MarqueeStrip() {
   const track1Ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
-  const items = ['Available for Work', 'Open to Opportunities', "Let's Build", 'MERN Stack'];
+  const items = marquee;
 
   useEffect(() => {
     if (reduced) return;
