@@ -3,7 +3,14 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 import { site } from '@/content/site';
-import { DEFAULT_TOPIC, isContactTopic, topicLabel, type ContactTopic } from '@/content/contact';
+import { DEFAULT_TOPIC, isContactTopic, topicLabel, topicPhrase, type ContactTopic } from '@/content/contact';
+import {
+  cleanHeader,
+  contactConfirmationEmail,
+  contactNotificationEmail,
+  type ContactSubmission,
+  type EmailContent,
+} from '@/lib/email/contactEmails';
 
 interface ContactRequestBody {
   name?: string;
@@ -37,17 +44,32 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+interface ResendEmail extends EmailContent {
+  from: string;
+  to: string;
+  replyTo: string;
 }
 
-function cleanHeader(input: string): string {
-  return input.replace(/[\r\n]/g, '').trim();
+/** Sends one email through the Resend API. Returns an error message, or null on success. */
+async function sendWithResend(apiKey: string, email: ResendEmail): Promise<string | null> {
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: email.from,
+        to: [email.to],
+        reply_to: email.replyTo,
+        subject: email.subject,
+        html: email.html,
+        text: email.text,
+      }),
+    });
+    if (res.ok) return null;
+    return `Resend ${res.status}: ${await res.text()}`;
+  } catch (error) {
+    return `Resend request failed: ${error instanceof Error ? error.message : String(error)}`;
+  }
 }
 
 export async function POST(request: Request) {
@@ -193,35 +215,42 @@ export async function POST(request: Request) {
       );
     }
 
-    const escapedName = escapeHtml(trimmedName);
-    const cleanReplyEmail = cleanHeader(email.trim());
-    const escapedMessage = escapeHtml(trimmedMessage).replace(/\n/g, '<br>');
-    const recipientEmail = process.env.CONTACT_EMAIL || site.email;
-    const subject = `[Portfolio · ${topicLabel(topic)}] ${cleanHeader(trimmedName)}`;
-    const html = `<p><strong>Topic:</strong> ${escapeHtml(topicLabel(topic))}</p><p><strong>Name:</strong> ${escapedName}</p><p><strong>Email:</strong> ${escapeHtml(cleanReplyEmail)}</p><p><strong>Message:</strong></p><p>${escapedMessage}</p>`;
+    const submission: ContactSubmission = {
+      name: trimmedName,
+      email: cleanHeader(email.trim()),
+      topicLabel: topicLabel(topic),
+      topicPhrase: topicPhrase(topic),
+      message: trimmedMessage,
+    };
+    const notification = contactNotificationEmail(submission);
+    // Where form messages are delivered, and the address visitors' confirmations come from.
+    const inbox = process.env.CONTACT_EMAIL || site.contactEmail;
 
-    if (process.env.RESEND_API_KEY) {
-      const resendRes = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY.trim()}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 'Portfolio Contact <onboarding@resend.dev>',
-          to: [recipientEmail],
-          reply_to: cleanReplyEmail,
-          subject,
-          html,
-        }),
+    const resendKey = process.env.RESEND_API_KEY?.trim();
+    if (resendKey) {
+      const notifyError = await sendWithResend(resendKey, {
+        ...notification,
+        from: `Portfolio contact form <${site.contactEmail}>`,
+        to: inbox,
+        replyTo: submission.email,
       });
 
-      if (resendRes.ok) {
+      if (!notifyError) {
+        // The visitor's confirmation is a courtesy: if it fails, the message still reached the inbox.
+        const confirmError = await sendWithResend(resendKey, {
+          ...contactConfirmationEmail(submission),
+          from: `${site.name} <${site.contactEmail}>`,
+          to: submission.email,
+          replyTo: inbox,
+        });
+        if (confirmError) console.error('Contact form confirmation email failed:', confirmError);
+
         return NextResponse.json({
           success: true,
-          message: 'Thank you! Your message has been sent successfully.',
+          message: 'Thank you! Your message has been sent, and a confirmation is on its way to your inbox.',
         });
       }
+      console.error('Contact form notification via Resend failed:', notifyError);
     }
 
     if (!process.env.GMAIL_APP_PASSWORD) {
@@ -229,7 +258,7 @@ export async function POST(request: Request) {
         const logDir = process.cwd();
         const logFile = path.join(logDir, 'messages.txt');
         const timestamp = new Date().toLocaleString('en-US', { timeZone: site.timeZone });
-        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nTopic: ${topicLabel(topic)}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
+        const logEntry = `\n======================================\nDate: ${timestamp} ${site.timeZoneLabel}\nSubject: ${notification.subject}\nTopic: ${topicLabel(topic)}\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n======================================\n`;
         fs.appendFileSync(logFile, logEntry, 'utf8');
 
         return NextResponse.json({
@@ -249,12 +278,14 @@ export async function POST(request: Request) {
       );
     }
 
+    // Fallback: Gmail SMTP. Signs in as GMAIL_USER (defaults to the published address).
+    const gmailUser = process.env.GMAIL_USER || site.email;
     const cleanAppPassword = (process.env.GMAIL_APP_PASSWORD || '').replace(/\s+/g, '');
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: recipientEmail,
+        user: gmailUser,
         pass: cleanAppPassword,
       },
       connectionTimeout: 4000,
@@ -263,11 +294,12 @@ export async function POST(request: Request) {
     });
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${recipientEmail}>`,
-      to: recipientEmail,
-      replyTo: cleanReplyEmail,
-      subject,
-      html,
+      from: `"Portfolio contact form" <${gmailUser}>`,
+      to: inbox,
+      replyTo: submission.email,
+      subject: notification.subject,
+      html: notification.html,
+      text: notification.text,
     });
 
     return NextResponse.json({

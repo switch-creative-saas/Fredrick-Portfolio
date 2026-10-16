@@ -1,10 +1,11 @@
+// `phrase` completes "Thanks for getting in touch about ..." in the confirmation email.
 export const CONTACT_TOPICS = [
-  { value: 'vitalink', label: 'VitaLink / investment' },
-  { value: 'dev', label: 'Development project' },
-  { value: 'design', label: 'Design project' },
-  { value: 'photography', label: 'Photography booking' },
-  { value: 'academic', label: 'Scholarship / academic' },
-  { value: 'other', label: 'Other' },
+  { value: 'vitalink', label: 'VitaLink / investment', phrase: 'VitaLink' },
+  { value: 'dev', label: 'Development project', phrase: 'a development project' },
+  { value: 'design', label: 'Design project', phrase: 'a design project' },
+  { value: 'photography', label: 'Photography booking', phrase: 'a photography booking' },
+  { value: 'academic', label: 'Scholarship / academic', phrase: 'a scholarship or academic matter' },
+  { value: 'other', label: 'Other', phrase: '' },
 ] as const;
 
 export type ContactTopic = (typeof CONTACT_TOPICS)[number]['value'];
@@ -17,6 +18,10 @@ export function isContactTopic(value: unknown): value is ContactTopic {
 
 export function topicLabel(topic: ContactTopic): string {
   return CONTACT_TOPICS.find((t) => t.value === topic)?.label ?? 'Other';
+}
+
+export function topicPhrase(topic: ContactTopic): string {
+  return CONTACT_TOPICS.find((t) => t.value === topic)?.phrase ?? '';
 }
 
 export const contactPage = {

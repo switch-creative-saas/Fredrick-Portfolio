@@ -21,6 +21,9 @@ export const site = {
   logo: { lead: 'fredrick', short: 'a.', long: 'akojuru' },
   // TODO(fred): confirm which email to publish.
   email: 'freddykojuru@gmail.com',
+  // Contact form inbox and the address visitors' confirmation emails come from.
+  // Must be on a domain verified in Resend (vitalink.africa).
+  contactEmail: 'fredrick@vitalink.africa',
   location: 'Abuja, Nigeria',
   timeZone: 'Africa/Lagos',
   timeZoneLabel: 'WAT',
